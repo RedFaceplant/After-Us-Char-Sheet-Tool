@@ -63,7 +63,7 @@ $ Polyglot(10)
 ? Skill Adeptness(10)
 ?? Starstruck(10)
 
-
+$
 ## Flaws ##
 
 ! Faulty Spirit (-15)
