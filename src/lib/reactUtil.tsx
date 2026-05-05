@@ -1,10 +1,10 @@
-import { type AbilityExtra } from '../assets/abilityList';
+import { type AbilityEnhancement } from '../assets/abilityList';
 import { abilityCostFormatter } from './util';
 
-export const formatAbilityExtra = (extra: AbilityExtra) => {
+export const formatAbilityEnhancement = (enhancement: AbilityEnhancement) => {
   return(
     <>
-        <b>{abilityCostFormatter(extra.cost, extra.degree)}</b> {extra.description}
+        <b>{abilityCostFormatter(enhancement.cost, enhancement.degree)}</b> {enhancement.description}
     </>
   )
 }

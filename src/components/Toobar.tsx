@@ -58,7 +58,7 @@ const importData = (
 export default function Toolbar({settings, setSettings, stats, setStats, currentAbilities, setCurrentAbilities} : {settings: Settings, setSettings: Function, stats: Stats, setStats: Function, currentAbilities: RenderedAbility[], setCurrentAbilities: Function}){
     const [showNewCharDialog, setShowNewCharDialog] = useState(false);
     const [showImportDialog, setShowImportDialog] = useState(false)
-    const {darkMode} = settings
+    const { darkMode, showAssociatedStat } = settings
 
     return (
         <header className="toolbar">
@@ -92,6 +92,14 @@ export default function Toolbar({settings, setSettings, stats, setStats, current
           </ConfirmDialog>
         </div>
         <div className="toolbar-right">
+          <label>
+            Show Associated Stats
+            <input
+              type="checkbox"
+              checked={showAssociatedStat}
+              onChange={() => setSettings("showAssociatedStat", !showAssociatedStat)}
+            />
+          </label>
           <label>
             Dark Mode
             <input

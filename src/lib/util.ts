@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { type Prereq} from '../assets/abilityList';
-import { type Degrees } from '../app/types';
+import { type BaseStatsId, type Degrees } from '../app/types';
 
 export function capitalFirst(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -87,4 +87,22 @@ export function abilityCostFormatter(cost: number, degree: Degrees | undefined):
   }
   
   return (`(${cost}/${degree[0].toUpperCase()})`)
+}
+
+/**
+ * Takes in any base stat and returns the three letter shorthand for that stat
+ */
+export function baseStatToShorthand(baseStat: BaseStatsId): string{
+  switch(baseStat){
+    case 'strength':
+      return "STR"
+    case 'agility':
+      return "AGL"
+    case "vigor":
+      return "VIG"
+    case "reason":
+      return "REA"
+    case "instinct":
+      return "INS"
+  }
 }

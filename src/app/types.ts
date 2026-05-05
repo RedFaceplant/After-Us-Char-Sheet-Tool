@@ -3,17 +3,20 @@
  * @param darkMode If the app should be in dark mode or not
  * @param verboseAbilities If the app should render abilities with descriptions or not
  * @param viewMode If the app is in view or edit mode
+ * @param showAssociatedStat Controls if the skills table renders with associated stats
  */
 export type Settings = {
   darkMode: boolean,
   verboseAbilities: boolean,
   viewMode: boolean,
+  showAssociatedStat: boolean,
 }
 
 export const defaultSettings: Settings = {
   darkMode: true,
   verboseAbilities: true,
   viewMode: false,
+  showAssociatedStat: false,
 }
 
 export type Degrees = "normal" | "amazing" | "epic" | "divine"
@@ -166,62 +169,64 @@ export const defaultStats: Stats = {
     metaStats: {
       name: "",
       notes: "",
-      image: "/public/placeholder-image.png"
+      image: "./placeholder-image.png"
     }
 }
 
+export type RenderSkill = { id: SkillId; label: string, assocStat: BaseStatsId }
+
 export const skillGroups: {
   group: string;
-  skills: { id: SkillId; label: string }[];
+  skills: RenderSkill[];
 }[] = [
   {
     group: "constitution",
     skills: [
-      { id: "acrobatics", label: "Acrobatics" },
-      { id: "aim", label: "Aim" },
-      { id: "athletics", label: "Athletics" },
-      { id: "brawl", label: "Brawl" },
-      { id: "endurance", label: "Endurance" },
+      { id: "acrobatics", label: "Acrobatics", assocStat: "agility" },
+      { id: "aim", label: "Aim", assocStat: "agility" },
+      { id: "athletics", label: "Athletics", assocStat: "strength" },
+      { id: "brawl", label: "Brawl", assocStat: "strength" },
+      { id: "endurance", label: "Endurance", assocStat: "vigor" },
     ],
   },
   {
     group: "education",
     skills: [
-      { id: "humanSciences", label: "Human sciences" },
-      { id: "magic", label: "Magic" },
-      { id: "medicine", label: "Medicine" },
-      { id: "mechanisms", label: "Mechanisms" },
-      { id: "naturalSciences", label: "Natural sciences" },
+      { id: "humanSciences", label: "Human sciences", assocStat: "reason" },
+      { id: "magic", label: "Magic", assocStat: "reason" },
+      { id: "medicine", label: "Medicine", assocStat: "reason" },
+      { id: "mechanisms", label: "Mechanisms", assocStat: "reason" },
+      { id: "naturalSciences", label: "Natural sciences", assocStat: "reason" },
     ],
   },
   {
     group: "survival",
     skills: [
-      { id: "animalHandling", label: "Animal handling" },
-      { id: "crafting", label: "Crafting" },
-      { id: "gathering", label: "Gathering" },
-      { id: "stealth", label: "Stealth" },
-      { id: "tracking", label: "Tracking" },
+      { id: "animalHandling", label: "Animal handling", assocStat: "instinct" },
+      { id: "crafting", label: "Crafting", assocStat: "reason" },
+      { id: "gathering", label: "Gathering", assocStat: "reason" },
+      { id: "stealth", label: "Stealth", assocStat: "agility" },
+      { id: "tracking", label: "Tracking", assocStat: "reason" },
     ],
   },
   {
     group: "awareness",
     skills: [
-      { id: "discern", label: "Discern" },
-      { id: "initiative", label: "Initiative" },
-      { id: "insight", label: "Insight" },
-      { id: "perception", label: "Perception" },
-      { id: "will", label: "Will" },
+      { id: "discern", label: "Discern", assocStat: "instinct" },
+      { id: "initiative", label: "Initiative", assocStat: "agility" },
+      { id: "insight", label: "Insight", assocStat: "instinct" },
+      { id: "perception", label: "Perception", assocStat: "reason" },
+      { id: "will", label: "Will", assocStat: "instinct" },
     ],
   },
   {
     group: "charisma",
     skills: [
-      { id: "acting", label: "Acting" },
-      { id: "deceiving", label: "Deceiving" },
-      { id: "diplomacy", label: "Diplomacy" },
-      { id: "intimidate", label: "Intimidate" },
-      { id: "ruse", label: "Ruse" },
+      { id: "acting", label: "Acting", assocStat: "instinct" },
+      { id: "deceiving", label: "Deceiving", assocStat: "reason" },
+      { id: "diplomacy", label: "Diplomacy", assocStat: "reason" },
+      { id: "intimidate", label: "Intimidate", assocStat: "reason" },
+      { id: "ruse", label: "Ruse", assocStat: "reason" },
     ],
   },
 ];

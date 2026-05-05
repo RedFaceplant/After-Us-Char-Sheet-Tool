@@ -1,25 +1,25 @@
 import { type RenderedAbility } from "../assets/abilityList"
-import { formatAbilityExtra } from "../lib/reactUtil"
+import { formatAbilityEnhancement } from "../lib/reactUtil"
 import { abilityCostFormatter } from "../lib/util"
 
 export function AbilityBlock({myAbility, removeAbility}: {myAbility: RenderedAbility, removeAbility: Function}){
-    const abilityExtras = () => {
-        const {extras, appliedExtrasList} = myAbility
+    const abilityEnhancements = () => {
+        const {enhancements, appliedEnhancementsList} = myAbility
 
-        if(!extras || !appliedExtrasList || appliedExtrasList.length == 0){
+        if(!enhancements || !appliedEnhancementsList || appliedEnhancementsList.length == 0){
             return(<></>)
         }
 
         return (
-            extras.map((extra, index) => {
-                if(!appliedExtrasList[index]){
+            enhancements.map((enhancement, index) => {
+                if(!appliedEnhancementsList[index]){
                     return(<></>)
                 }
                 
                 return (
                     <>
                         <br />
-                        + {formatAbilityExtra(extra)}
+                        + {formatAbilityEnhancement(enhancement)}
                     </>
                 )
             })
@@ -31,7 +31,7 @@ export function AbilityBlock({myAbility, removeAbility}: {myAbility: RenderedAbi
             <button className={"delete-ability"} onClick={() => {removeAbility()}}>X</button>
             <b>{myAbility.name} {abilityCostFormatter(myAbility.cost, myAbility.degree)} </b>
             - {myAbility.description}
-            {abilityExtras()}
+            {abilityEnhancements()}
         </li>
     )
 }

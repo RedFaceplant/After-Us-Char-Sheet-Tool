@@ -1,9 +1,16 @@
 import "../styles/App.css";
-import {type Stats, skillGroups} from "../app/types"
-import { capitalFirst } from "../lib/util";
+import { type Stats, skillGroups, type Settings, type RenderSkill } from "../app/types"
+import { capitalFirst, baseStatToShorthand } from "../lib/util";
 
 
-export default function SkillsTable({stats, setStats}: {stats: Stats, setStats: Function}){
+export default function SkillsTable({stats, setStats, settings}: {stats: Stats, setStats: Function, settings: Settings}){
+    const showSkillStat = ({assocStat}: RenderSkill) => {
+        if(!settings.showAssociatedStat){
+            return ""
+        }
+        return ` (${baseStatToShorthand(assocStat)})`
+    }
+    
     return(
         <table className="skills-table">
             <thead>
@@ -46,7 +53,11 @@ export default function SkillsTable({stats, setStats}: {stats: Stats, setStats: 
                         className={i !== skillGroups.length - 1 ? "group-divider" : ""}
                         >
                         <div className="skill-cell">
-                            <span>{skill.label}:</span>
+                            <span>
+                                {skill.label}
+                                {showSkillStat(skill)}
+                                :
+                            </span>
 
                             <input
                             type="number"

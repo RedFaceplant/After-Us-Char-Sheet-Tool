@@ -3,10 +3,10 @@ import { type SkillId, type BaseStatsId, type Degrees } from "../app/types";
 export type Categories = "combat" | "magic" | "personal" | "skills" | "flaws"
 
 /** 
- * Defines if this ability has extra options, and what mode they use for selection.
- * None - no extras. Any - Extras can be collected in any order. Stacking - Extras must be collected sequentially.
+ * Defines if this ability has enhancement options, and what mode they use for selection.
+ * None - no enhancements. Any - Enhancements can be collected in any order. Stacking - Enhancements must be collected sequentially.
  */
-type ExtraModes = "none" | "any" | "stacking"
+type EnhancementModes = "none" | "any" | "stacking"
 
 
 export type Prereq = {
@@ -15,7 +15,7 @@ export type Prereq = {
   abilities?: string[];
 };
 
-export type AbilityExtra = {
+export type AbilityEnhancement = {
     cost: number,
     description: string,
     degree?: Degrees,
@@ -30,14 +30,14 @@ export type Ability = {
     prereq?: Prereq // An object containing all requirements needed in order to have this ability.
     stackable?: Boolean // If true, this ability can be aquired more than once on one sheet. Defaults to False.
     exclusive?: String // The name of another ability. If given as a param, this ability cannot be added to a sheet that already has that ability.
-    extraMode?: ExtraModes // If this ability has extra options, this value must be 'any' or 'stacking'
-    extras?: AbilityExtra[] // If this ability has extras, they are defined as an array here.
+    enhancementMode?: EnhancementModes // If this ability has enhancement options, this value must be 'any' or 'stacking'
+    enhancements?: AbilityEnhancement[] // If this ability has enhancements, they are defined as an array here.
 }
 
 export interface RenderedAbility extends Ability{
     id: string,
     flaw: boolean,
-    appliedExtrasList?: boolean[]
+    appliedEnhancementsList?: boolean[]
 }
 
 function getSortedAbilities(
@@ -155,17 +155,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "You don't receive disadvantage when using extreme weapons.",
         },
         {
-            name: "Damage Resistance",
-            cost: 10,
-            stackable: true,
-            description: "You receive advantage against a damage type other than aetherburn or psychic, at your choice.",
-        },
-        {
             name: "Bite",
             cost: 5,
             description: "Using your powerful teeth and jaws you can make a 1d6 unarmed strike for slashing damage. This can be done while both of your hands are holding objects. This does not benefit from extended reach or heavy hands.",
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 10,
                     description: "This attack does 2d6 damage instead"
@@ -176,8 +170,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Brawler",
             cost: 10,
             description: "You can perform an additional unarmed melee attack when performing melee attacks. Doing this causes every attack to receive disadvantage. You must declare you're using this ability before rolling any attack.",
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 10,
                     degree: "amazing",
@@ -189,8 +183,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Extra Energy",
             cost: 10,
             description: "With a standard action, you can recover an amount of HP equal to two times your VIG. You can only use this ability when your HP is critical. Using this ability yields 2 FP. this ability does not benefit from the ability Vital Energy.",
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
@@ -203,8 +197,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: 10,
             description: "Choose a damage type you have affinity with. Using a major action, you can unleash an attack against all the characters in your melee range. Using this ability yields 1 FP. This ability doesn't differentiate friends or foes. You can acquire this ability once for each damage type.",
             stackable: true,
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     description: "You can activate this ability as a reaction to being hit with a melee attack. This reaction only targets the character attacking you."
@@ -215,8 +209,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Leverage",
             cost: 20,
             description: "When using any melee weapon besides light ones with both hands, you add two times your STR to the damage. If you are benefiting from Acuity with Weapon, this ability has no effects.",
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
@@ -288,8 +282,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "Magic focused on defense and reflections. You learn the compositions Shield, Reinforce, and Wall",
             spells: ["shield", "reinforce", "wall"],
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
@@ -305,8 +299,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "Magic that controls how to shape energy. You learn the compositions Ball of Energy, Burst, Damage, Fan, and Line",
             spells: ["ball of energy", "burst", "damage", "fan", "line"],
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
@@ -407,8 +401,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "Magic that taps into the energy of nature. You learn the compositions Wild Shape and Summon Creature",
             spells: ["wild shape", "summon creature"],
-            extraMode: "stacking",
-            extras: [
+            enhancementMode: "stacking",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
@@ -438,8 +432,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "Advanced magic that allows combining lifeforms. You learn the composition Fusion",
             spells: ["fusion"],
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "epic",
@@ -459,8 +453,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "Magic that deals with telepathy. You learn the compositions Read Thoughts and Detect Thoughts",
             spells: ["read thoughts", "detect thoughts"],
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 10,
                     degree: "amazing",
@@ -503,8 +497,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: 10,
             degree: "amazing",
             description: "You gain a new way of movement by flight. Your movement value of flight is equal to your Athletics value. Flying yields 1 FP per round. You need freedom of movement to fly.",
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
@@ -708,8 +702,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             description: "you receive advantage on tests of Acrobatics for balance and secure fall. You also produce less sound when walking, receiving advantage on Stealth tests against targets listening for you.",
-            extraMode: "any",
-            extras: [
+            enhancementMode: "any",
+            enhancements: [
                 {
                     cost: 10,
                     description: "You are less likely to trigger traps or mechanisms that activate through pressure plates. When passing though one, roll 1d. With a result 1 or 2, the pressure plate is triggered."
@@ -924,8 +918,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: -30,
             description: "Choose a damage type. Against it, your defense receives a penalty of 10 and you receive major disadvantage on every test to avoid the damage.",
             stackable: true,
-            extraMode: "any",
-            extras: [{
+            enhancementMode: "any",
+            enhancements: [{
                 cost: -20,
                 description: "Choose a damage type to which you have vulnerability. Against it, your defense is only the value given by your equipment, and you receive total disadvantage on every test to avoid it, never being able to use abilities that reduce this last effect."
             }]
@@ -935,8 +929,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: -10,
             description: "Choose a damage type. When hit by this damage type, you receive disadvantage.",
             stackable: true,
-            extraMode: "any",
-            extras: [{
+            enhancementMode: "any",
+            enhancements: [{
                 cost: -10,
                 description: "Choose a damage type to which you have weakness. You receive +100% damage from this type."
             }]

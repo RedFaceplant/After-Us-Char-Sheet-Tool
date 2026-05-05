@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import ConfirmDialog from "../lib/ConfirmDialog";
-import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityExtra} from "../assets/abilityList"
+import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityEnhancement} from "../assets/abilityList"
 import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst } from "../lib/util";
 import { type Stats } from "../app/types";
-import { formatAbilityExtra } from "../lib/reactUtil";
+import { formatAbilityEnhancement } from "../lib/reactUtil";
 
 export default function AbilityButton({currentAbilities, setCurrentAbilities, stats}: {currentAbilities: RenderedAbility[], setCurrentAbilities: Function, stats: Stats}){
     const [showAbilitySelect, setShowAbilitySelect] = useState(false); // The actual pop up menu showing
@@ -103,20 +103,20 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
         const buttonStatus: boolean[] = []
         let stopFlag = false
         
-        // Get extra button status and check extras for degree requirements
-        if(fullAbility.extras){
-            fullAbility.extras.map((extra, index) => {
+        // Get enhancement button status and check enhancements for degree requirements
+        if(fullAbility.enhancements){
+            fullAbility.enhancements.map((enhancement, index) => {
                 const checkbox = document.getElementById(`${selectedAbility}-${index}`) as HTMLInputElement
                 buttonStatus[index] = checkbox.checked
 
-                if(checkbox.checked && !degreeRequirementMet(stats.characterInfo.degree, extra.degree ?? "normal")){
+                if(checkbox.checked && !degreeRequirementMet(stats.characterInfo.degree, enhancement.degree ?? "normal")){
                     stopFlag = true
                 }
             })
         }
 
         if(stopFlag){
-            setWarningMode("degree-extra")
+            setWarningMode("degree-enhancement")
             setShowPrereqWarning(true)
             return
         }
@@ -126,15 +126,15 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
             ...fullAbility,
             flaw: selectedGroup == 'flaws',
             id: randomString(),
-            appliedExtrasList: buttonStatus,
+            appliedEnhancementsList: buttonStatus,
         }
 
         // Actually add the ability into the list
         setCurrentAbilities([...currentAbilities, convertedAbility])
     }
 
-    const abilityExtraOptions = (extras: AbilityExtra[], extraMode: string = "none") => {
-        if(!extras || extraMode === "none"){
+    const abilityEnhancementOptions = (enhancements: AbilityEnhancement[], enhancementMode: string = "none") => {
+        if(!enhancements || enhancementMode === "none"){
             return (<></>)
         }
 
@@ -142,11 +142,11 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
             <div>
                 <hr />
                 <form>
-                    {extras.map((extra, index) => (
+                    {enhancements.map((enhancement, index) => (
                     <>
                         <input type="checkbox" id={`${selectedAbility}-${index}`} key={`${selectedAbility}-${index}`} />
                         <label htmlFor={`${selectedAbility}-${index}`}>
-                            {formatAbilityExtra(extra)}
+                            {formatAbilityEnhancement(enhancement)}
                         </label>
                         <br />
                     </>
@@ -158,7 +158,7 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
 
     const abilityBreakdown = () => {
         return useMemo(() => {
-            const { cost, degree, prereq, description, extras, extraMode } = getCurrentAbility() ?? {}
+            const { cost, degree, prereq, description, enhancements, enhancementMode } = getCurrentAbility() ?? {}
 
             return (
             <div>
@@ -169,7 +169,7 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
                 <b>Prereq: </b><span>{formatPrereqs(prereq)}</span>
                 <br />
                 <span>{description ?? '(Select an Ability)'}</span>
-                {extras ? abilityExtraOptions(extras, extraMode) : <></>}
+                {enhancements ? abilityEnhancementOptions(enhancements, enhancementMode) : <></>}
             </div>
         )
         }, [selectedAbility])
@@ -238,9 +238,9 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
                 (<>
                     <span>The ability '{selectedAbility}' requires sheet to be a degree of at least '{capitalFirst(getCurrentAbility()?.degree ?? "undefined")}'</span>
                 </>)
-            :   warningMode == "degree-extra" ?
+            :   warningMode == "degree-enhancement" ?
                 (<>
-                    <span>Sheet does not meet degree requirements for a selected extra on the ability '{selectedAbility}'</span>
+                    <span>Sheet does not meet degree requirements for a selected enhancement on the ability '{selectedAbility}'</span>
                 </>)
             :
                 (<>

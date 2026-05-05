@@ -2,7 +2,7 @@ import { useState } from "react";
 import { clamp } from "ramda"
 
 import "../styles/App.css";
-import {type Stats, defaultStats, type Settings, defaultSettings} from "./types"
+import {type Stats, defaultStats, type Settings, defaultSettings, type Degrees} from "./types"
 import {type RenderedAbility} from "../assets/abilityList"
 
 import Toolbar from '../components/Toobar'
@@ -14,6 +14,30 @@ import SkillsTable from "../components/SkillsTable";
 import AbilityButton from "../components/AbilityButton"
 import ConfirmDialog from "../lib/ConfirmDialog";
 
+type LevelCaps = Record<Degrees, {basic: number, group: number, skill: number}>
+
+const levelCaps: LevelCaps= {
+  normal: {
+    basic: 20,
+    group: 5,
+    skill: 10,
+  },
+  amazing: {
+    basic: 30,
+    group: 10,
+    skill: 15,
+  },
+  epic: {
+    basic: 40,
+    group: 15,
+    skill: 15,
+  },
+  divine: {
+    basic: 40,
+    group: 15,
+    skill: 15,
+  }
+}
 
 export default function App() {
   const [settings, setSettings] = useState<Settings>(defaultSettings)
@@ -33,7 +57,6 @@ export default function App() {
       }))
   }
 
-
   const handleStatChange = (
     category: keyof Stats,
     key: string,
@@ -41,15 +64,15 @@ export default function App() {
   ) => {
     switch (category){
       case "baseStats":{
-        value = clamp(0, 20, value);
+        value = clamp(0, levelCaps[stats.characterInfo.degree].basic, value);
         break;
       }
       case "skillGroups":{
-        value = clamp(0, 15, value);
+        value = clamp(0, levelCaps[stats.characterInfo.degree].group, value);
         break;
       }
       case "skills":{
-        value = clamp(0, 15, value);
+        value = clamp(0, levelCaps[stats.characterInfo.degree].skill, value);
         break;
       }
     }
@@ -150,7 +173,7 @@ export default function App() {
 
             {/* Row 2 (skills table spans 2 columns) */}
             <div className="skill-table-holder">
-              <SkillsTable stats={stats} setStats={handleStatChange}></SkillsTable>
+              <SkillsTable stats={stats} setStats={handleStatChange} settings={settings}></SkillsTable>
             </div>
             
           </div>
