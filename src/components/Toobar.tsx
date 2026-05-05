@@ -8,7 +8,7 @@ import { toKebabCase } from "../lib/util";
 const exportData = (stats: Stats, abilities: RenderedAbility[]) => {
   const data = {
     exportedAt: new Date().toISOString(),
-    toolVersion: 1,
+    toolVersion: 0,
     stats,
     abilities
   };

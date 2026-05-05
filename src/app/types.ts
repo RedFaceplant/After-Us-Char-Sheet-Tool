@@ -166,7 +166,7 @@ export const defaultStats: Stats = {
     metaStats: {
       name: "",
       notes: "",
-      image: "/src/assets/placeholder-image.png"
+      image: "/public/placeholder-image.png"
     }
 }
 
