@@ -1,0 +1,172 @@
+import { useState } from "react";
+import { clamp } from "ramda"
+
+import "../styles/App.css";
+import {type Stats, defaultStats, type Settings, defaultSettings} from "./types"
+import {type RenderedAbility} from "../assets/abilityList"
+
+import Toolbar from '../components/Toobar'
+import BasicStatTable from "../components/BasicStatTable";
+import SecondaryStatTable from "../components/SecondaryStatTable";
+import AbilityZone from "../components/AbilityZone";
+import NoteZone from "../components/NoteZone";
+import SkillsTable from "../components/SkillsTable";
+import AbilityButton from "../components/AbilityButton"
+import ConfirmDialog from "../lib/ConfirmDialog";
+
+
+export default function App() {
+  const [settings, setSettings] = useState<Settings>(defaultSettings)
+  const [stats, setStats] = useState<Stats>(defaultStats);
+  const [currentAbilities, setCurrentAbilities] = useState<RenderedAbility[]>([])
+  const [showImagePopup, setShowImagePopup] = useState(false)
+
+  const { darkMode } = settings
+
+  const handleSettingChange = (
+    key: string,
+    value: boolean,
+  ) => {
+    setSettings((prev) => ({
+        ...prev,
+        [key]: value,
+      }))
+  }
+
+
+  const handleStatChange = (
+    category: keyof Stats,
+    key: string,
+    value: number
+  ) => {
+    switch (category){
+      case "baseStats":{
+        value = clamp(0, 20, value);
+        break;
+      }
+      case "skillGroups":{
+        value = clamp(0, 15, value);
+        break;
+      }
+      case "skills":{
+        value = clamp(0, 15, value);
+        break;
+      }
+    }
+    setStats((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [key]: value,
+      },
+    }));
+  };
+
+  const handleStatChangeString = (
+    category: keyof Stats,
+    key: string,
+    value: string
+  ) => {
+    
+    setStats((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [key]: value,
+      },
+    }));
+  };
+
+  const setImageURL = () => {
+    const { value } = document.getElementById("imageURL") as HTMLInputElement
+
+    if(!value){
+      handleStatChangeString("metaStats", "image", defaultStats.metaStats.image)
+      return
+    }
+
+    handleStatChangeString("metaStats", "image", value)
+  }
+
+
+
+  return (
+    <div className={darkMode ? "app dark" : "app light"}>
+      <Toolbar 
+      settings={settings}
+      setSettings={handleSettingChange}
+      stats={stats} setStats={setStats}
+      currentAbilities={currentAbilities}
+      setCurrentAbilities={setCurrentAbilities}
+      ></Toolbar>
+
+      {/* Scrollable main content */}
+      <main className="main-content">
+        <div className="page">
+          <div className="main-grid">
+            {/* Row 1 */}
+            <div className="left-top">
+              <div className="name-row">
+                <span className="name-label">Name:</span>
+                <input
+                  type="text"
+                  placeholder="Character Name"
+                  className="character-name"
+                  value={stats.metaStats.name}
+                  onChange={e => handleStatChangeString("metaStats", "name", e.target.value as string)}
+                />
+              </div>
+              <hr />
+              <div className="char-image">
+                <img 
+                  src={stats.metaStats.image}
+                  onClick={
+                    () => setShowImagePopup(true)
+                  } />
+                  <ConfirmDialog
+                    onConfirm={
+                      () => {
+                        setImageURL()
+                        setShowImagePopup(false)
+                      }
+                    }
+                    onCancel={() => setShowImagePopup(false)}
+                    showConfirm={showImagePopup}
+                  >
+                    <label className="image-url">
+                      <b>Set Image URL</b>
+                      <br/>
+                      <input id="imageURL" type={"text"} defaultValue={stats.metaStats.image} />
+                    </label>
+                  </ConfirmDialog>
+              </div>
+            </div>
+            <div className="middle-top">
+              <div className="mints-spacer"></div>
+              <SecondaryStatTable stats={stats} setStats={handleStatChangeString} abilities={currentAbilities}></SecondaryStatTable>
+              <br />
+              <BasicStatTable stats={stats} setStats={handleStatChange}></BasicStatTable>
+            </div>
+
+            {/* Row 2 (skills table spans 2 columns) */}
+            <div className="skill-table-holder">
+              <SkillsTable stats={stats} setStats={handleStatChange}></SkillsTable>
+            </div>
+            
+          </div>
+
+          {/* Right column bottom content */}
+          <div className="right-column">
+            <div className="mints-spacer"></div>
+            <AbilityButton currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} stats={stats}></AbilityButton>
+            <hr />
+            <AbilityZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities}></AbilityZone>
+            <AbilityZone flawsZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities}></AbilityZone>
+            <NoteZone stats={stats} handleStatChangeString={handleStatChangeString}></NoteZone>
+            <div className="mints-spacer"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}

@@ -1,0 +1,31 @@
+
+Needs:
+* Change the name of Ability Extras to Enhancements
+* Stat blocks limited by Degree
+* ALL abilities and flaws
+* Model text field with XP constant
+* List associated stats in skill table
+* Ability Extra Requires Previous System
+* Better comments and typing in a few spots
+
+Probably should but not required:
+* Generic dropdown that can be added to ability selection:
+* Damage type dropdown that can be added to abilities like Damage Affinity
+* Dropdown of all current Affinities
+* Dropdown of current spells
+* Dropdown for Skill selection
+
+Wants:
+* Cleaner stackable ability display
+* Fill Blank Spot under Basic Stats
+* Convert Skill Group Option Dropdown into For Loops
+* Degree Filter on Ability List
+
+Wishes:
+* Toggle to show Skill table to show bonuses instead of inputs
+* Toggle to show Ability Descriptions
+* roll D20 for me
+* HP FP AP tracker
+* Custom Attack builder
+* Weapon builder
+* Composition Lookup Tool

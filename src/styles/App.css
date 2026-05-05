@@ -1,0 +1,319 @@
+/* Base App */
+.app {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+}
+
+.dark {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+.light {
+  background-color: #f0f0f0;
+  color: #121212;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+img {
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.image-url input {
+  width: 100%;
+}
+
+/* Toolbar */
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: inherit;
+  border-bottom: 2px solid #4444FF;
+  z-index: 100;
+}
+
+.toolbar button {
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.copyright {
+  font-weight: bold;
+}
+
+.main-content {
+  margin-top: 50px; /* same as toolbar height */
+  flex: 1;
+  overflow-y: hidden;
+  padding: 1rem;
+}
+
+/* the character image */
+.char-image {
+  border: 1px solid gray;
+  height: 500px;
+  position: relative;
+  text-align: center;
+  align-content: center;
+  color: black;
+}
+
+/* Character name */
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.name-label {
+  white-space: nowrap;
+}
+
+.character-name {
+  flex: 1;
+  background: transparent;
+  color: inherit;
+  border: none;
+  font-size: inherit;
+  font-weight: bold;
+}
+
+/* Tables */
+table {
+  border: 1px #888 solid;
+  border-spacing: 0;
+  width: 100%;
+}
+
+td {
+  border: 1px #888 solid;
+  padding-left: 2px
+}
+
+.secondary-stat-table td{
+  width: 25%;
+}
+
+.basic-stat-table td{
+  width: 50%;
+}
+
+.stat-input{
+  width: 98%;
+  background: transparent;
+  border: 0px;
+  color: inherit;
+  font-size: 24px;
+}
+
+.size-select{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+/* Abilities, Flaws, notes */
+.Abilities-Body {
+  min-height: 430px;
+}
+
+.Flaws-Body {
+  min-height: 100px;
+}
+
+.note-input{
+  width: 95%;
+  min-width: 95%;
+  max-width: 95%;
+  background: transparent;
+  color: inherit;
+  height: 10vh;
+  font-size: 10pt;
+  font-family: inherit;
+}
+
+.note-zone{
+  margin-left: 10px
+}
+
+.ability-button{
+  width: 100px;
+}
+
+.right-column hr{
+  width: 100%;
+}
+
+.ability-label {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Ensures the label and dropdown are vertically centered */
+}
+
+.ability-label select {
+  width: 50%;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.ability-list{
+  list-style-type:none;
+  padding: 0;
+}
+
+.delete-ability{
+  margin-right: 5px;
+}
+
+/* Grid CSS */
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  min-width: 0;
+}
+
+/* Top row */
+.left-top {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.middle-top {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Skills table spans left + middle */
+.skill-table-holder {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid gray;
+}
+
+/* Right column is independant */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 60px); /* account for toolbar */
+  overflow-y: auto;
+  min-width: 0;
+}
+
+/* Mint's Spacer */
+.mints-spacer{
+  min-height: 32px;
+  margin: 0px;
+}
+
+/* the actual Skills table */
+.skills-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.skills-table th,
+.skills-table td {
+  border: 1px solid gray;
+  padding: 0.4rem;
+  vertical-align: top;
+}
+
+.group-divider {
+  border-right: 3px double gray;
+}
+
+
+.skill-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-cell span {
+  font-size: 0.85rem;
+}
+
+.skill-cell input {
+  width: 45px;
+  background: transparent;
+  border: 1px solid gray;
+  color: inherit;
+  text-align: center;
+}
+
+.skills-table th {
+  text-align: left;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Confirm Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+}
+
+.modal {
+  background: #222;
+  color: white;
+  padding: 1.5rem;
+  border: 1px solid gray;
+  border-radius: 8px;
+  min-width: 300px;
+}
+
+.ability-modal {
+  width: 40%;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
