@@ -218,6 +218,103 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             ]
         },
+        {
+            name: "Deflection",
+            cost: 10,
+            prereq: {
+                skill: {
+                    brawl: 3
+                }
+            },
+            description: "As a reaction, you can avoid a ranged attack that would pass your defense if you make a Brawl check higher than the attack. Costs 1 FP and counts as a dodge",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "When sucessfuly deflecting an attack you can choose to redirect the attack to a new target with an Aim check. Adds +1 FP"
+                }
+            ]
+        },
+        {
+            name: "Enhanced Strikes",
+            cost: 10,
+            description: "Using a minor action you can increase the damage of your melee attack by 1d6 for the rest of your turn. This ability costs 1 FP",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "When using this ability, you can change the damage type for your attacks to a damage type to one you have affinity with."
+                },
+                {
+                    cost: 10,
+                    description: "This ability also works with ranged attacks."
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "Choose a damage type that you have affinity for. When using this ability, you can add the chosen damage type to your attacks, making them cause both damage types at the same time."
+                }
+            ]
+        },
+        {
+            name: "Multi-Strike",
+            cost: 20,
+            prereq: {
+                base: {
+                    agility: 5
+                }
+            },
+            stackable: true,
+            description: "Choose between Melee and Ranged attacks. Each turn you can peform a number of additional attacks equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You don't recieve disadvantage on attacks given by this ability"
+                },
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "You can perfom any number of addtional attacks for 3 FP."
+                }
+            ]
+        },
+        {
+            name: "Stun",
+            cost: 10,
+            description: "You can perform an attack that instead of dealing damage stuns the target instead. The target must succeed on Endurance against your DC 10 + Aim or Brawl (the one used for the attack) or they become stunned. Costs 1 FP",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You can increase the DC of the stun test by 1 for every extra 1 FP you choose to add. This can't be used with the Paralize enhancement"
+                },
+                {
+                    cost: 20,
+                    description: "Instead of stunning, you can fully paralyze the target. The DC changes to be 5 + Aim or Brawl."
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "You can increase the DC of the paralyze test by 1 for every extra 1 FP you choose to add."
+                },
+            ]
+        },
+        {
+            name: "Weapon Focus",
+            cost: 10,
+            description: "Choose a damage type you have affinity with. When performing attacks with this damage type, you get +2 to the attack test.",
+            stackable: true,
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "Choose a damage type you have Weapon Focus with. You gcause +2 damage with attacks of this type."
+                },
+            ]
+        },
     ],
     
     magic: [
@@ -511,11 +608,136 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             ]
         },
+        {
+            name: "Extended Reach",
+            cost: 10,
+            description: "Your melee range is extended. All weapons (and unarmed) are treated as if they have another layer of Reach on them.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "Add one more layer of Reach"
+                }
+            ]
+        },
+        {
+            name: "Fusion",
+            cost: 30,
+            degree: "amazing",
+            description: "Using a complete action, you can fuse with a willing character. The fusion has the highest stats between characters that make up the fusion, as well as all abilities and flaws from both. The fusion lasts for the number of rounds equal to your VIG (before the fusion).",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "The fusion will come with no FP or AP."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "The fusion will last for the whole scene."
+                },
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "You can fuse with an unwilling character if you are grappling them and beat them in an Endurance check."
+                },
+            ]
+        },
+        {
+            name: "Harmless Appearance",
+            cost: 10,
+            description: "Against targets that don't know you, you receive advantage on tests of Deceive and Initiative. This doesn't affect characters with the flaw Simple Mind.",
+            stackable: true,
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "When in combat, as long as you don't perfom any action that causes harm to another character, you can avoid being attacked as long as your opponent fails a Discern test against your Deception."
+                },
+                {
+                    cost: 10,
+                    description: "This ability works on characters with the flaw Simple Mind"
+                }
+            ]
+        },
+        {
+            name: "Hidden Power",
+            cost: 10,
+            description: "You can concentrate energy to release more power. In combat you can concentrate to increase your basic stats, where you are considered off gaurd. For every round concentrating, you take 1 FP and your stat goes up by 1.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "When increasing your VIG, your HP will increase as well."
+                },
+                {
+                    cost: 10,
+                    description: "When increasing your INS, your HP will increase as well."
+                },
+                {
+                    cost: 10,
+                    description: "When increasing your INS, your HP will increase as well."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can concentrate faster, receiving 2 FP per round and +2 to each Skill"
+                }
+            ]
+        },
+        {
+            name: "Invisibility",
+            cost: 20,
+            degree: "amazing",
+            description: "Using a minor action, you become invisible. Every character has major disavantage on attacks against you and you recieve major advantage on Stealth tests. Staying invisible yields 1 FP per round.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 15,
+                    degree: "amazing",
+                    description: "Your invisibility doesn't fade upon performing aggressive actions."
+                },
+                {
+                    cost: 15,
+                    degree: "amazing",
+                    description: "Your invisibility doesn't fade upon receiving damage."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "Your invisibility doesn't fade upon becoming defeated."
+                }
+            ]
+        },
+        {
+            name: "Possession",
+            cost: 20,
+            degree: "amazing",
+            description: "Using a major action you can enter the body of an unconscious or defeated target while grappling them. You can assume the target's body, gaining all physical stats and abilities from them.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "You can possess conscious and undefeated targets. The target gets advantage on its tests to resist the possession and expel you. All other aspects are the same."
+                },
+            ]
+        },
         // Special Senses group
         {
             name: "Improved Flair",
             cost: 5,
             description: "your sense of smell is much more precise, giving you advantage on Perception tests and other tests related to it.",
+        },
+        {
+            name: "Flair for Emotions",
+            cost: 5,
+            prereq: {
+                abilities: ["Improved Flair"]
+            },
+            description: "You can smell the hormones of your target, giving you +2 on Discern tests.",
         },
         {
             name: "Improved Hearing",
