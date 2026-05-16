@@ -6,7 +6,54 @@ export type Categories = "combat" | "magic" | "personal" | "skills" | "flaws"
  * Defines if this ability has enhancement options, and what mode they use for selection.
  * None - no enhancements. Any - Enhancements can be collected in any order. Stacking - Enhancements must be collected sequentially.
  */
-type EnhancementModes = "none" | "any" | "stacking"
+export type EnhancementModes = "none" | "any" | "stacking"
+
+/** Generic dropdown that can be added to ability selection:
+* Dropdown for Affinity selection
+* Dropdown of all current Affinities
+* Dropdown of current spells
+* Dropdown for Skill selection
+*/
+export const DROPDOWNS = {
+    attackType: ["melee", "ranged"],
+    damageResistance: [
+        "biologic",
+        "chemical",
+        "cold",
+        "electric",
+        "fire",
+        "necrotic",
+        "posion",
+        "slash",
+        "smash",
+        "sonic",
+    ],
+    damageType: [
+        "biologic",
+        "chemical",
+        "cold",
+        "electric",
+        "fire",
+        "necrotic",
+        "posion",
+        "slash",
+        "smash",
+        "sonic",
+        "aetherburn",
+        "psychic",
+    ],
+    maneuver: ["break", "disarm", "knock down", "push", "trample"],
+    arena: ["water", "forest", "plains", "desert", "ice", "mountain", "sky", "city", "underground"],
+    performanceArt: ["instrument", "acting", "singing"],
+    vehicle: ["light air", "heavy air", "light land", "heavy land", "light water", "heavy water"],
+    gathering: ["collecting", "extracting"],
+}
+
+
+/**
+ * Defines if this ability has a dropdown with specific settings.
+ */
+export type DropdownModes = keyof typeof DROPDOWNS | "none" | "currentSpells" | "currentDamageAffinities"
 
 
 export type Prereq = {
@@ -32,12 +79,14 @@ export type Ability = {
     exclusive?: String // The name of another ability. If given as a param, this ability cannot be added to a sheet that already has that ability.
     enhancementMode?: EnhancementModes // If this ability has enhancement options, this value must be 'any' or 'stacking'
     enhancements?: AbilityEnhancement[] // If this ability has enhancements, they are defined as an array here.
+    dropdownMode?: DropdownModes // If this ability uses a dropdown, this is the type of dropdown
 }
 
 export interface RenderedAbility extends Ability{
     id: string,
     flaw: boolean,
     appliedEnhancementsList?: boolean[]
+    dropdownSelection?: string // The selection from the dropdown, if present
 }
 
 function getSortedAbilities(
@@ -80,6 +129,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Charged Attack",
             cost: 10,
             stackable: true,
+            dropdownMode: "attackType",
             description: "Takes a complete action and 1 FP. Your next attack does +100% damage if it lands. This ability can't be combined with any ability that allows multiple attacks",
         },
         {
@@ -91,6 +141,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Improved Maneuver",
             cost: 5,
             stackable: true,
+            dropdownMode: "maneuver",
             description: "Choose a maneuver type. You receive advantage when preforming or defending against the chosen maneuver. You can aquire this once for each maneuver",
         },
         {
@@ -124,12 +175,14 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Damage Affinity",
             cost: 10,
             stackable: true,
+            dropdownMode: "damageType",
             description: "Choose a damage type that you don't have affinity with. You receive affinity with it. You can aquire this once for each damage type.",
         },
         {
             name: "Damage Resistance",
             cost: 10,
             stackable: true,
+            dropdownMode: "damageResistance",
             description: "You receive advantage against a damage type other than aetherburn or psychic, at your choice.",
         },
         {
@@ -197,6 +250,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: 10,
             description: "Choose a damage type you have affinity with. Using a major action, you can unleash an attack against all the characters in your melee range. Using this ability yields 1 FP. This ability doesn't differentiate friends or foes. You can acquire this ability once for each damage type.",
             stackable: true,
+            dropdownMode: "currentDamageAffinities",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -266,7 +320,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             stackable: true,
-            description: "Choose between Melee and Ranged attacks. Each turn you can peform a number of additional attacks equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
+            dropdownMode: "attackType",
+            description: "Each turn you can peform a number of additional attacks equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -311,7 +366,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 10,
-                    description: "Choose a damage type you have Weapon Focus with. You gcause +2 damage with attacks of this type."
+                    description: "Choose a damage type you have Weapon Focus with. You cause +2 damage with attacks of this type."
                 },
             ]
         },
@@ -590,6 +645,22 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "You can interact with incorporeal beings as if they were corporeal.",
         },
         {
+            name: "Command",
+            cost: 10,
+            description: "You can shout orders to your allies in the range of your voice. Doing this consumes a minor action, yields 1 FP, and gives a bonus of +2 to every ally on every test for the rest of the scene.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 15,
+                    description: "Change the bonus to +3."
+                },
+                {
+                    cost: 20,
+                    description: "Change the bonus to +4."
+                }
+            ]
+        },
+        {
             name: "Flight",
             cost: 10,
             degree: "amazing",
@@ -804,6 +875,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             stackable: true,
+            dropdownMode: "arena",
             description: "Choose a terrain type. When on this terrain, you get a bonus of +2 to all Actobatics, Athletics, Perception, Survival, and Tracking tests.",
         },
         {
@@ -815,6 +887,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             stackable: true,
+            dropdownMode: "performanceArt",
             description: "Choose a performance art. You receive advantage on Acting tests involving it.",
         },
         {
@@ -936,6 +1009,64 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     description: "You always suffer minimum fall damage, as if all the dice rolled 1 during the damage calculation."
                 }
             ]
+        },
+        {
+            name: "Expert Pilot",
+            cost: 5,
+            prereq: {
+                skill: {
+                    mechanisms: 2
+                }
+            },
+            stackable: true,
+            dropdownMode: "vehicle",
+            description: "You receive advantage on Mechanisms tests of drive and operate when using the selected vehicle type.",
+        },
+        {
+            name: "Fearsome",
+            cost: 10,
+            prereq: {
+                skill: {
+                    intimidate: 2
+                }
+            },
+            description: "Using a Major action, you can perform a test of Intimidate against a target on the range of your voice. If the target fails, it'll become frightened. Doing this yields 1 FP.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "This only uses a minor action instead of a major action."
+                },
+            ]
+        },
+        {
+            name: "Makeshift Crafting",
+            cost: 10,
+            prereq: {
+                skill: {
+                    crafting: 2
+                }
+            },
+            description: "You can perform makeshift repairs to items. Roll a repair test. Instead of consuming a complete action, this test consumes a major action, and does not consume any resources. The repairs work for a scene, after which it is reverted.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You can use this ability with complex items, such as the ones related to the Mechanisms skill."
+                },
+            ]
+        },
+        {
+            name: "Overstocker",
+            cost: 10,
+            prereq: {
+                skill: {
+                    gathering: 2
+                }
+            },
+            stackable: true,
+            dropdownMode: "gathering",
+            description: "When performing the selected task, you receive advantage and collect twice as much resources.",
         },
         // Special Movements
         {

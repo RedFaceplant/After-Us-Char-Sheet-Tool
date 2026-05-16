@@ -1,23 +1,38 @@
 import { useState, useEffect, useMemo } from "react";
 import ConfirmDialog from "../lib/ConfirmDialog";
-import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityEnhancement} from "../assets/abilityList"
-import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst } from "../lib/util";
+import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityEnhancement, type EnhancementModes} from "../assets/abilityList"
+import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst, booleansRequirePrevious } from "../lib/util";
 import { type Stats } from "../app/types";
 import { formatAbilityEnhancement } from "../lib/reactUtil";
+import AbilityGenericDropdown from "./AbilityGenericDropdown";
 
-export default function AbilityButton({currentAbilities, setCurrentAbilities, stats}: {currentAbilities: RenderedAbility[], setCurrentAbilities: Function, stats: Stats}){
+export default function AbilityButton({
+        currentAbilities, 
+        setCurrentAbilities, 
+        stats, 
+        currentDamageAffinities, 
+        currentSpells
+    }: {
+        currentAbilities: RenderedAbility[], 
+        setCurrentAbilities: Function, 
+        stats: Stats, 
+        currentDamageAffinities: string[], 
+        currentSpells: string[]
+    }){
     const [showAbilitySelect, setShowAbilitySelect] = useState(false); // The actual pop up menu showing
     const [selectedGroup, setSelectedGroup] = useState<Categories>("combat" as const) // The selected catergory
     const [options, setOptions] = useState<string[]>([]); // All abilities in the selected catergory
     const [selectedAbility, setSelectedAbility] = useState<string>("") // Currently selected ability
     const [showPrereqWarning, setShowPrereqWarning] = useState(false); // Controls the pop up warning that the ability couldn't be added
     const [warningMode, setWarningMode] = useState("prereq"); // Controls what the pop up warning will say
+    const [abilityDropdownSelection, setAbilityDropdownSelection] = useState("null"); // Dropdown on abilities that use it
 
 
     // Update the abilities dropdown whenever the group dropdown changes
     useEffect(() => {
         const abilityNames = abilities[selectedGroup].map((ability) => ability.name);
         setOptions(abilityNames);
+        setAbilityDropdownSelection("null")
     }, [selectedGroup]);
 
     // Get the full ability out of the list
@@ -86,6 +101,12 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
             return
         }
 
+        if(fullAbility.dropdownMode != "none" && currentAbilities.find(obj => obj.name == selectedAbility && obj.dropdownSelection == abilityDropdownSelection)){
+            setWarningMode("dropdownStacking")
+            setShowPrereqWarning(true)
+            return
+        }
+
         // Early return if a mutually exclusive ability is already on the sheet.
         if(fullAbility.exclusive && currentAbilities.find(obj => obj.name == fullAbility.exclusive)){
             setWarningMode("exclusive")
@@ -121,19 +142,26 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
             return
         }
 
+        if(fullAbility.enhancementMode == "stacking" && !booleansRequirePrevious(buttonStatus)){
+            setWarningMode("enhancement-stacking")
+            setShowPrereqWarning(true)
+            return
+        }
+
         // Convert the ability from list format to sheet format
-        const convertedAbility = {
+        const convertedAbility: RenderedAbility = {
             ...fullAbility,
             flaw: selectedGroup == 'flaws',
             id: randomString(),
             appliedEnhancementsList: buttonStatus,
+            dropdownSelection: abilityDropdownSelection
         }
 
         // Actually add the ability into the list
         setCurrentAbilities([...currentAbilities, convertedAbility])
     }
 
-    const abilityEnhancementOptions = (enhancements: AbilityEnhancement[], enhancementMode: string = "none") => {
+    const abilityEnhancementOptions = (enhancements: AbilityEnhancement[], enhancementMode: EnhancementModes = "none") => {
         if(!enhancements || enhancementMode === "none"){
             return (<></>)
         }
@@ -146,7 +174,7 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
                     <>
                         <input type="checkbox" id={`${selectedAbility}-${index}`} key={`${selectedAbility}-${index}`} />
                         <label htmlFor={`${selectedAbility}-${index}`}>
-                            {formatAbilityEnhancement(enhancement)}
+                            {formatAbilityEnhancement(enhancement, (enhancementMode == "stacking" && index != 0))}
                         </label>
                         <br />
                     </>
@@ -158,7 +186,7 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
 
     const abilityBreakdown = () => {
         return useMemo(() => {
-            const { cost, degree, prereq, description, enhancements, enhancementMode } = getCurrentAbility() ?? {}
+            const { cost, degree, prereq, description, enhancements, enhancementMode, dropdownMode } = getCurrentAbility() ?? {}
 
             return (
             <div>
@@ -168,11 +196,18 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
                 <br />
                 <b>Prereq: </b><span>{formatPrereqs(prereq)}</span>
                 <br />
+                <AbilityGenericDropdown 
+                    optionSelected={abilityDropdownSelection} 
+                    setOptionSelected={setAbilityDropdownSelection} 
+                    dropdownMode={dropdownMode}
+                    currentDamageAffinities={currentDamageAffinities}
+                    currentSpells={currentSpells}
+                />
                 <span>{description ?? '(Select an Ability)'}</span>
                 {enhancements ? abilityEnhancementOptions(enhancements, enhancementMode) : <></>}
             </div>
         )
-        }, [selectedAbility])
+        }, [selectedAbility, abilityDropdownSelection])
     }
 
     return (
@@ -234,6 +269,10 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
                 (<>
                     <span>The ability '{selectedAbility}' can't be aquired more than once</span>
                 </>)
+            :   warningMode == "dropdownStacking" ?
+                (<>
+                    <span>The ability '{selectedAbility}' can't be aquired more than once with the selection '{capitalFirst(abilityDropdownSelection)}'</span>
+                </>)
             :   warningMode == "degree" ?
                 (<>
                     <span>The ability '{selectedAbility}' requires sheet to be a degree of at least '{capitalFirst(getCurrentAbility()?.degree ?? "undefined")}'</span>
@@ -241,6 +280,10 @@ export default function AbilityButton({currentAbilities, setCurrentAbilities, st
             :   warningMode == "degree-enhancement" ?
                 (<>
                     <span>Sheet does not meet degree requirements for a selected enhancement on the ability '{selectedAbility}'</span>
+                </>)
+            :   warningMode == "enhancement-stacking" ?
+                (<>
+                    <span>Enhancement on the ability '{selectedAbility}' requires a previous enhancement that was not selected</span>
                 </>)
             :
                 (<>

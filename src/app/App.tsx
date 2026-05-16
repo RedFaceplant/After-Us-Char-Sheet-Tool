@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { clamp } from "ramda"
+import { useEffect, useState } from "react";
+import { clamp, isNotEmpty, isNotNil } from "ramda"
 
 import "../styles/App.css";
 import {type Stats, defaultStats, type Settings, defaultSettings, type Degrees} from "./types"
@@ -44,8 +44,37 @@ export default function App() {
   const [stats, setStats] = useState<Stats>(defaultStats);
   const [currentAbilities, setCurrentAbilities] = useState<RenderedAbility[]>([])
   const [showImagePopup, setShowImagePopup] = useState(false)
+  const [currentDamageAffinities, setCurrentDamageAffinities] = useState<string[]>([])
+  const [currentSpells, setCurrentSpells] = useState<string[]>([])
 
   const { darkMode } = settings
+
+  // Update currentSpells and currentDamageAffinities whenever the abilities list changes
+  useEffect(() => {
+    let affinities: string[] = []
+    let spells: string[] = []
+
+    currentAbilities.forEach(ability => {
+      if(isNotNil(ability.spells) && isNotEmpty(ability.spells)){
+        spells = [...spells, ...ability.spells]
+      }
+
+      if(ability.name == "Damage Affinity" && isNotNil(ability.dropdownSelection)){
+        affinities.push(ability.dropdownSelection)
+      }
+    })
+
+    if(affinities.length == 0){
+      affinities = ["no affinities"]
+    }
+
+    if(spells.length == 0){
+      spells = ["no known spells"]
+    }
+
+    setCurrentDamageAffinities(affinities)
+    setCurrentSpells(spells)
+  }, [currentAbilities])
 
   const handleSettingChange = (
     key: string,
@@ -180,13 +209,19 @@ export default function App() {
 
           {/* Right column bottom content */}
           <div className="right-column">
-            <div className="mints-spacer"></div>
-            <AbilityButton currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} stats={stats}></AbilityButton>
+            <div className="mints-spacer" />
+            <AbilityButton 
+              currentAbilities={currentAbilities} 
+              setCurrentAbilities={setCurrentAbilities} 
+              stats={stats}
+              currentDamageAffinities={currentDamageAffinities}
+              currentSpells={currentSpells}
+            />
             <hr />
-            <AbilityZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities}></AbilityZone>
-            <AbilityZone flawsZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities}></AbilityZone>
-            <NoteZone stats={stats} handleStatChangeString={handleStatChangeString}></NoteZone>
-            <div className="mints-spacer"></div>
+            <AbilityZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} />
+            <AbilityZone flawsZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} />
+            <NoteZone stats={stats} handleStatChangeString={handleStatChangeString} />
+            <div className="mints-spacer" />
           </div>
         </div>
       </main>

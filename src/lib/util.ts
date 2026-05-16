@@ -106,3 +106,24 @@ export function baseStatToShorthand(baseStat: BaseStatsId): string{
       return "INS"
   }
 }
+
+/**
+ * Takes in a list of booleans. Outputs true if only true elements are present, then false elements.
+ * Otherwise, returns false. In other words, if a true is present after a false appears, then return false.
+ * The 'Regex' for this function would be (true)*(false)*
+ * Designed to be used with "Requires Previous" enhancement chains
+ * @returns boolean
+ */
+export function booleansRequirePrevious(boolArray: boolean[]): boolean{
+  let boolFlag = true
+  let returnFlag = true
+  boolArray.forEach((bool) => {
+    if(bool && !boolFlag){
+      returnFlag = false
+    }
+    else if(!bool){
+      boolFlag = false
+    }
+  })
+  return returnFlag
+}
