@@ -260,6 +260,95 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
+            name: "Weapon Focus",
+            cost: 10,
+            description: "Choose a damage type you have affinity with. When performing attacks with this damage type, you receive +2 to your attack test. This ability can be aquired once for each damage type",
+            stackable: true,
+            dropdownMode: "currentDamageAffinities",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You also cause +2 damage with attacks of this damage type."
+                }
+            ]
+        },
+        {
+            name: "Projectile",
+            cost: 10,
+            description: "Choose a damage type you have affinity to. You gain a natural ranged weapon that does 1d6 damage in the type chosen. You can aquire this once for each damage type.",
+            stackable: true,
+            dropdownMode: "currentDamageAffinities",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "Increase the damage type of this natural ranged weapon by 1d6."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "Increase the damage by another 1d6."
+                },
+                {
+                    cost: 30,
+                    degree: "amazing",
+                    description: "Increase the damage by another 1d6."
+                },
+                {
+                    cost: 40,
+                    degree: "epic",
+                    description: "Increase the damage by another 1d6."
+                },
+                {
+                    cost: 50,
+                    degree: "epic",
+                    description: "Increase the damage by another 1d6."
+                },
+            ]
+        },
+        {
+            name: "Damage Invulnerability",
+            cost: 50,
+            degree: "amazing",
+            description: "Choose a damage type. You receive +10 on your defense against that damage, and receive advantage on every test to avoid it. You can acquire this ability once for each damage type.",
+            stackable: true,
+            dropdownMode: "damageType",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 50,
+                    degree: "epic",
+                    description: "This invulnerability is enhanced, yielding +20 to your defense and major advantage on every test to avoid it."
+                },
+                {
+                    cost: 50,
+                    degree: "divine",
+                    description: "This invulnerability is further enhanced, yielding +30 to your defense and total advantage on every test to avoid it."
+                }
+            ]
+        },
+        {
+            name: "Mighty Strike",
+            cost: 10,
+            degree: "normal",
+            description: "When performing a melee attack, you can choose to receive disadvantage on the attack test in exchange of adding 1d6 to the damage, if the attack lands.",
+            stackable: true,
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "You can choose to receive major disadvantage on the attack test to receive +3d to the damage."
+                },
+                {
+                    cost: 10,
+                    degree: "epic",
+                    description: "You can choose to receive total disadvantage on the attack test to receive +5d to the damage."
+                }
+            ]
+        },
+        {
             name: "Leverage",
             cost: 20,
             description: "When using any melee weapon besides light ones with both hands, you add two times your STR to the damage. If you are benefiting from Acuity with Weapon, this ability has no effects.",
@@ -287,6 +376,28 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     cost: 20,
                     degree: "amazing",
                     description: "When sucessfuly deflecting an attack you can choose to redirect the attack to a new target with an Aim check. Adds +1 FP"
+                }
+            ]
+        },
+        {
+            name: "Parry",
+            cost: 10,
+            prereq: {
+                skill: {
+                    brawl: 3
+                }
+            },
+            description: "As a reaction, you can avoid a melee attack that would pass your defense if you make a Brawl check higher than the attack. Costs 1 FP and counts as a dodge",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 20,
+                    description: "When sucessfuly deflecting an attack you can preform a basic melee attack as a counter-attack. Adds 1FP in addition to the parry."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can use any melee attack as a counter-attack instead of a basic melee attack, as long as it would normally use a single standard action and it is a single attack."
                 }
             ]
         },

@@ -2,20 +2,14 @@
 
 * [?] Acuity with Weapon(10)
 * [!] Armor of Skill(10)
-* [ ] Damage Invulnerability(50/A)
 * [?] Defensive Stance(10)
 * [!] Die Hard(20)
 * [?] Dual Wield(20)
-* [ ] Harming Touch(10)
 * [?] Heavy Hands(10)
-* [ ] Mighty Strike(10)
 * [?] Mobility(10)
-* [ ] Parry(10)
-* [ ] Projectile(10)
 * [!] Rage(10)
 * [!] Combat Veteran(10)
 * [!] Special Attack(10)
-* [ ] Weapon Focus(10)
 
 **Magic**
 
