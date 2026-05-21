@@ -6,8 +6,10 @@ Needs:
 * Degree Filter on Ability List
 * ALL abilities and flaws
 * Better comments and typing in a few spots
+* Ability selection should clear when "new sheet" is selected
 
 Wants:
+* Ability Search
 * Cleaner stackable ability display
 * Toggle to show Skill table to show bonuses instead of inputs
 * Toggle to show Ability Descriptions

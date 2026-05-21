@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { type Prereq} from '../assets/abilityList';
-import { type BaseStatsId, type Degrees } from '../app/types';
+import { type BaseStatsId, type Degrees, type Sizes } from '../app/types';
 
 export function capitalFirst(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -42,6 +42,14 @@ export function formatPrereqs(prereq?: Prereq): string {
     parts.push(...prereq.abilities);
   }
 
+  // Handle sizes
+  if (prereq.largerThan){
+    parts.push(`Size larger than '${capitalFirst(prereq.largerThan)}'`)
+  }
+  if (prereq.smallerThan){
+    parts.push(`Size smaller than '${capitalFirst(prereq.smallerThan)}'`)
+  }
+
   return parts.length ? parts.join(", ") : "none";
 }
 
@@ -74,6 +82,16 @@ export function degreeRequirementMet(checkDegree: Degrees, degreeRequirement: De
 
   // CheckDegree must be lesser than the degreeRequirement, return false.
   return false
+}
+
+
+export const sizeOrder: Record<Sizes, number> = {
+  tiny: 0,
+  small: 1,
+  medium: 2,
+  big: 3,
+  huge: 4,
+  colossal: 5,
 }
 
 /**

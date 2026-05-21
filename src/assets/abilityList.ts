@@ -1,4 +1,4 @@
-import { type SkillId, type BaseStatsId, type Degrees } from "../app/types";
+import { type SkillId, type BaseStatsId, type Degrees, type Sizes } from "../app/types";
 
 export type Categories = "combat" | "magic" | "personal" | "skills" | "flaws"
 
@@ -60,6 +60,8 @@ export type Prereq = {
   base?: Partial<Record<BaseStatsId, number>>;
   skill?: Partial<Record<SkillId, number>>;
   abilities?: string[];
+  smallerThan?: Sizes;
+  largerThan?: Sizes;
 };
 
 export type AbilityEnhancement = {
@@ -124,6 +126,12 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Armor Adeptness"]
             },
             description: "Further reduces penalties when using armor. Heavy armor causes no disadvantage when worn.",
+        },
+        {
+            name: "Acuity with Weapon",
+            // Todo: Add Enhancements
+            cost: 10,
+            description: "When attacking with light melee weapons, you can use your AGI instead of STR to calculate your Brawl skill and the damage of the attacks.",
         },
         {
             name: "Charged Attack",
@@ -482,7 +490,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
     ],
-    
     magic: [
         {
             name: "Mantia",
@@ -977,6 +984,14 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
     ],
     skills: [
         {
+            name: "Nimble",
+            cost: 10,
+            prereq: {
+                smallerThan: "big",
+            },
+            description: "You can use your AGI instead of STR on your Athletics skill.",
+        },
+        {
             name: "Arena",
             cost: 20,
             prereq: {
@@ -1288,6 +1303,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Ambient Dependence",
             cost: -10,
             stackable: true,
+            dropdownMode: "arena",
             description: "Choose a terrain type as your ambient. If you pass one day away from this ambient, you receive disadvantage on every test. To recover, you need to stay on your chosen ambient for at least one day and rest once inside of it.",
         },
         {
@@ -1382,10 +1398,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: -30,
             description: "Choose a damage type. Against it, your defense receives a penalty of 10 and you receive major disadvantage on every test to avoid the damage.",
             stackable: true,
+            dropdownMode: "damageType",
             enhancementMode: "any",
             enhancements: [{
                 cost: -20,
-                description: "Choose a damage type to which you have vulnerability. Against it, your defense is only the value given by your equipment, and you receive total disadvantage on every test to avoid it, never being able to use abilities that reduce this last effect."
+                description: "Against this damage type, your defense is only the value given by your equipment, and you receive total disadvantage on every test to avoid it, never being able to use abilities that reduce this last effect."
             }]
         },
         {
@@ -1393,10 +1410,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: -10,
             description: "Choose a damage type. When hit by this damage type, you receive disadvantage.",
             stackable: true,
+            dropdownMode: "damageType",
             enhancementMode: "any",
             enhancements: [{
                 cost: -10,
-                description: "Choose a damage type to which you have weakness. You receive +100% damage from this type."
+                description: "Against this damage type, you receive +100% damage from this type."
             }]
         },
         // Mental Disability Section

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import ConfirmDialog from "../lib/ConfirmDialog";
 import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityEnhancement, type EnhancementModes} from "../assets/abilityList"
-import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst, booleansRequirePrevious } from "../lib/util";
+import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst, booleansRequirePrevious, sizeOrder } from "../lib/util";
 import { type Stats } from "../app/types";
 import { formatAbilityEnhancement } from "../lib/reactUtil";
 import AbilityGenericDropdown from "./AbilityGenericDropdown";
@@ -62,14 +62,15 @@ export default function AbilityButton({
             }
         }
 
-        // TODO: FIX THIS - this just checks if any ability is in the list
-        // Check if ability prereqs are met
-        for(const ability in prereqs.abilities){
-            if(!(ability in currentAbilities)){
-                return false
-            }
+        // Size Prereq
+        if(prereqs.smallerThan){
+            return sizeOrder[stats.characterInfo.size] < sizeOrder[prereqs.smallerThan]
         }
 
+        // Check if ability prereqs are met
+        if(prereqs.abilities){
+            return prereqs.abilities.every(ability => currentAbilities.some(a => a.name === ability))
+        }
         return true
     }
 
