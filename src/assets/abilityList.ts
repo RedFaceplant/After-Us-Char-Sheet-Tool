@@ -1,4 +1,4 @@
-import { type SkillId, type BaseStatsId, type Degrees, type Sizes } from "../app/types";
+import { type SkillId, type BaseStatsId, type Degrees, type Sizes, skillGroupNames } from "../app/types";
 
 export type Categories = "combat" | "magic" | "personal" | "skills" | "flaws"
 
@@ -47,6 +47,7 @@ export const DROPDOWNS = {
     performanceArt: ["instrument", "acting", "singing"],
     vehicle: ["light air", "heavy air", "light land", "heavy land", "light water", "heavy water"],
     gathering: ["collecting", "extracting"],
+    skillGroups: skillGroupNames
 }
 
 
@@ -126,6 +127,24 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Armor Adeptness"]
             },
             description: "Further reduces penalties when using armor. Heavy armor causes no disadvantage when worn.",
+        },
+        {
+            name: "Armor of Skill",
+            cost: 10,
+            description: "Add your group bonus of the chosen skill group to your DFN when you aren't using armor.",
+            dropdownMode: "skillGroups",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You can add this group bonus to your DFN as long as you aren't using heavy armor."
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "You can always add this group bonus to your DFN"
+                }
+            ]
         },
         {
             name: "Acuity with Weapon",
@@ -1193,6 +1212,57 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             stackable: true,
             dropdownMode: "gathering",
             description: "When performing the selected task, you receive advantage and collect twice as much resources.",
+        },
+        {
+            name: "Pickpocket",
+            cost: 10,
+            prereq: {
+                skill: {
+                    stealth: 3
+                }
+            },
+            description: "Using a Major action, you can take items from other people without being noticed. Roll a test of Stealth (DC 20; light). If successful, you take an item that isn't equipped by the target. Items that are too big cause disadvantage. The target can perform a test of Perception with DC equal to the result of your Stealth test. If succeeded, the target notices something was stolen.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "Pickpocket requires a minor action instead of a major action."
+                },
+                {
+                    cost: 10,
+                    description: "Pickpocket is reduced to effortless, which means it takes 0 FP."
+                },
+                {
+                    cost: 20,
+                    description: "Requires both previous enhancements. Once per round you can Pickpocket for 1FP as a bonus action."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can steal equipped weapons as a maneuver test. Roll for Stealth against the target's brawl, if you succeed you steal the weapon."
+                },
+                {
+                    cost: 30,
+                    degree: "amazing",
+                    description: "Requires previous. You can steal any equipped item, but receive disavantage on the test."
+                }
+            ]
+        },
+        {
+            name: "Polyglot",
+            cost: 10,
+            description: "You receive advantage on Human Sciences test of language.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You receive major advantage instead of advantage.",
+                },
+                {
+                    cost: 10,
+                    description: "You receive total advantage instead of major advantage.",
+                },
+            ]
         },
         // Special Movements
         {

@@ -7,6 +7,10 @@ Needs:
 * ALL abilities and flaws
 * Better comments and typing in a few spots
 * Ability selection should clear when "new sheet" is selected
+* Spells on enhancements
+* Ability red flag system
+* Dropdowns on enhancements
+* Dropdown null on first selection
 
 Wants:
 * Ability Search

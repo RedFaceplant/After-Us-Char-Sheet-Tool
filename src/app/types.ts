@@ -46,7 +46,7 @@ const baseStats = [
 export type BaseStatsId = typeof baseStats[number];
 export type BaseStats = Record<BaseStatsId, number>;
 
-const skillGroupNames = [
+export const skillGroupNames = [
   "constitution",
   "education",
   "survival",
