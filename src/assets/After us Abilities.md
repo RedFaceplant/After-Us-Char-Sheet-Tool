@@ -23,11 +23,7 @@
 
 * [!] Attractive(10)
 * [brf] Extra Attractive(10)
-* [ ] Disease Resistance(10)
 * [ ] Extra Limb(10)
-* [ ] Imitate(20/A)
-* [ ] Poison Resistance(10)
-* [ ] Possession(20/A)
 
 **Skill**
 
@@ -35,7 +31,6 @@
 * [?] Masterpiece(30)
 * [brf] Self Sufficient(20)
 * [brf] Skill Adeptness(10)
-* [ ] Identify Person(10)
 
 
 **Flaws**
@@ -45,5 +40,3 @@
 * [*] Reduced Mobility (-10)
 * [*] Reduced Stamina (-15)
 * [*] Simple Mind (-10)
-* [ ] Skill Inability (-5)
-* [ ] Damage Inability (-10)

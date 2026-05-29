@@ -210,13 +210,26 @@ export default function App() {
           {/* Right column bottom content */}
           <div className="right-column">
             <div className="mints-spacer" />
-            <AbilityButton 
-              currentAbilities={currentAbilities} 
-              setCurrentAbilities={setCurrentAbilities} 
-              stats={stats}
-              currentDamageAffinities={currentDamageAffinities}
-              currentSpells={currentSpells}
-            />
+            <div className="name-row">
+              <AbilityButton 
+                currentAbilities={currentAbilities} 
+                setCurrentAbilities={setCurrentAbilities} 
+                stats={stats}
+                currentDamageAffinities={currentDamageAffinities}
+                currentSpells={currentSpells}
+              />
+              <button 
+                className="ability-button" 
+                disabled
+                onClick={
+                    () => {
+                        console.log("This button shouldn't be clickable. yet...")
+                    }
+                }
+              >
+                Add Special Attack
+              </button>
+            </div>
             <hr />
             <AbilityZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} />
             <AbilityZone flawsZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} />

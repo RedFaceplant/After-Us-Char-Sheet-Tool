@@ -57,7 +57,7 @@ export const skillGroupNames = [
 type GroupId = typeof skillGroupNames[number];
 type SkillGroups = Record<GroupId, number>;
 
-const skills = [
+export const skills = [
   "acrobatics",
   "aim",
   "athletics",

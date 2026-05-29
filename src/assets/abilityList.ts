@@ -1,4 +1,4 @@
-import { type SkillId, type BaseStatsId, type Degrees, type Sizes, skillGroupNames } from "../app/types";
+import { type SkillId, type BaseStatsId, type Degrees, type Sizes, skillGroupNames, skills } from "../app/types";
 
 export type Categories = "combat" | "magic" | "personal" | "skills" | "flaws"
 
@@ -47,7 +47,8 @@ export const DROPDOWNS = {
     performanceArt: ["instrument", "acting", "singing"],
     vehicle: ["light air", "heavy air", "light land", "heavy land", "light water", "heavy water"],
     gathering: ["collecting", "extracting"],
-    skillGroups: skillGroupNames
+    skillGroups: skillGroupNames,
+    skills,
 }
 
 
@@ -798,6 +799,99 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
+            name: "Possession",
+            cost: 20,
+            degree: "amazing",
+            description: "By touching an unconscious target, you can enter their body if you beat a Will check (DC target's endurance). You assume the target's body, meaning you can use all their physical stats and abilities. Using this ability consumes a whole turn, and yeilds FP in an amount equal to the target's highest stat. The target can keep performing endurance tests to expel you.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "You can possess conscious targets. You must successfully grapple the target. The target gains advantage on endurance when trying to expel you. All other aspects stay the same."
+                }
+            ]
+        },
+        {
+            name: "Disease Resistance",
+            cost: 10,
+            description: "You receive advantage on Endurance tests to resist diseases and to recover from them.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 15,
+                    description: "Increase the bonus to major advantage."
+                },
+                {
+                    cost: 20,
+                    description: "Increase the bonus to total advantage."
+                },
+                {
+                    cost: 25,
+                    degree: "amazing",
+                    description: "You become immune to mundane diseases."
+                },
+                {
+                    cost: 30,
+                    degree: "epic",
+                    description: "You become immune to magical diseases."
+                }
+            ]
+        },
+        {
+            name: "Poison Resistance",
+            cost: 10,
+            description: "You receive advantage on tests of Endurance to resist poisons. Any damage caused by poisons to you is reduced by 5.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 15,
+                    description: "Increase the bonus to major advantage. The damage reduction becomes 10"
+                },
+                {
+                    cost: 20,
+                    description: "Increase the bonus to total advantage. The damage reduction becomes 15"
+                },
+                {
+                    cost: 25,
+                    degree: "amazing",
+                    description: "You become immune to mundane poisons."
+                },
+                {
+                    cost: 30,
+                    degree: "epic",
+                    description: "You become immune to magical poisons."
+                }
+            ]
+        },
+        {
+            name: "Imitate",
+            cost: 20,
+            degree: "amazing",
+            description: "You can imitate an ability from a target. If possible, the target must have used this ability before you can test for imitating it. To do so, you must use one combat turn and be well succeeded in a test of Perception with DC equal to the target's defense. If well succeeded, you copy the ability for a scene. You can imitate a maximum number of abilites equal to your original REA score.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    description: "You can copy skills from a target. You must see the target use the skill once before you can do a perception check on the skill. The FP is equal to the target's skill bonus"
+                },
+                {
+                    cost: 20,
+                    description: "You can imitate a target's stats. Physical stats are imitated the same way as skills, where Mental stats require you to see the use of a mental ability. The FP is equal to the stat's value."
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "You can copy flaws from a target."
+                },
+                {
+                    cost: 50,
+                    degree: "epic",
+                    description: "You can imitate a target as a whole. You must have studied the target for a whole week. Using this yeilds FP equal to the target's highest stat"
+                }
+            ]
+        },
+        {
             name: "Flight",
             cost: 10,
             degree: "amazing",
@@ -1249,6 +1343,22 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
+            name: "Identify Person",
+            cost: 10,
+            description: "Using a Major action, you can use your ruse skill to get information on the stats, skills, abilities and flaws of a target. The DC is equal to 10 plus the target's power divided by 100. Each test gives one peice of information (stat values, skill group values, mental or physical abilites, ect. If the target has good or bad reputation, you get advantage.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "If the target has good or bad reputation, you get total advantage on the ruse test."
+                },
+                {
+                    cost: 10,
+                    description: "The DC of the ruse test is halved."
+                },
+            ]
+        },
+        {
             name: "Polyglot",
             cost: 10,
             description: "You receive advantage on Human Sciences test of language.",
@@ -1486,6 +1596,20 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 cost: -10,
                 description: "Against this damage type, you receive +100% damage from this type."
             }]
+        },
+        {
+            name: "Damage Inability",
+            cost: -10,
+            description: "You are unable to have an affinitiy with a specific damage type.",
+            stackable: true,
+            dropdownMode: "damageType",
+        },
+        {
+            name: "Skill Inability",
+            cost: -5,
+            description: "You have disadvantage on all tests of this skill.",
+            stackable: true,
+            dropdownMode: "skills",
         },
         // Mental Disability Section
         {

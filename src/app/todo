@@ -11,6 +11,8 @@ Needs:
 * Ability red flag system
 * Dropdowns on enhancements
 * Dropdown null on first selection
+* Switch to Redux
+* Skill Inability / Adeptness flag on skills
 
 Wants:
 * Ability Search
