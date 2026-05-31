@@ -1,5 +1,8 @@
 import "../styles/App.css";
 import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { type RootState } from "../app/store";
+
 import {type Stats, type Sizes, sizeModifiers} from "../app/types"
 import {calculateXP} from '../lib/xpCalculation'
 import type { RenderedAbility } from "../assets/abilityList";
@@ -40,8 +43,12 @@ const trackedAbilities = [
   "Extra Magic Limit",
 ];
 
-export default function SecondaryStatTable({stats, setStats, abilities}: {stats: Stats, setStats: Function, abilities: RenderedAbility[]}){
+export default function SecondaryStatTable({stats, setStats}: {stats: Stats, setStats: Function}){
     const { baseStats, characterInfo: { size, modifier, degree } } = stats
+
+    const abilities = useSelector(
+      (state: RootState) => state.currentAbilities.abilities
+    )
 
     const xp = useMemo(() => calculateXP(stats, abilities), [stats, abilities]);
 

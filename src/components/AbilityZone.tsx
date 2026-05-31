@@ -1,13 +1,13 @@
 import "../styles/App.css";
-import { AbilityBlock } from "./AbilityBlock";
-import {type RenderedAbility} from "../assets/abilityList"
+import { useSelector } from "react-redux";
+import { type RootState } from "../app/store";
 
-export default function AbilityZone({ currentAbilities, setCurrentAbilities, flawsZone }: { currentAbilities: RenderedAbility[], setCurrentAbilities: Function, flawsZone?: boolean; }){
-    const removeAbility = (myAbility: RenderedAbility) => {
-        setCurrentAbilities(
-            currentAbilities.filter(abilities => abilities.id !== myAbility.id)
-        );
-    }
+import { AbilityBlock } from "./AbilityBlock";
+
+export default function AbilityZone({ flawsZone }: { flawsZone?: boolean; }){
+    const currentAbilities = useSelector(
+      (state: RootState) => state.currentAbilities.abilities
+    )
     
     return(
         <div>
@@ -17,9 +17,7 @@ export default function AbilityZone({ currentAbilities, setCurrentAbilities, fla
                 <ul className="ability-list">
                     {currentAbilities.map((ability) => (
                         (ability.flaw && flawsZone) || (!ability.flaw && !flawsZone)? (
-                            <AbilityBlock myAbility={ability} removeAbility={() => {
-                                removeAbility(ability)
-                            }}></AbilityBlock>
+                            <AbilityBlock myAbility={ability}></AbilityBlock>
                         ) : (
                             <></>
                         )

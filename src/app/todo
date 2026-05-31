@@ -1,5 +1,6 @@
 
 Needs:
+* Switch to Redux
 * Ability and Flaw exclusive dropdown selection fix
 * Model text field with XP constant
 * Convert All Dropdowns into For Loops
@@ -11,7 +12,6 @@ Needs:
 * Ability red flag system
 * Dropdowns on enhancements
 * Dropdown null on first selection
-* Switch to Redux
 * Skill Inability / Adeptness flag on skills
 
 Wants:

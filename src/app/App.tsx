@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { clamp, isNotEmpty, isNotNil } from "ramda"
+import { useState } from "react";
+import { clamp } from "ramda"
+import { useSelector } from "react-redux";
+import { type RootState } from "./store";
 
 import "../styles/App.css";
-import {type Stats, defaultStats, type Settings, defaultSettings, type Degrees} from "./types"
-import {type RenderedAbility} from "../assets/abilityList"
+import {type Stats, defaultStats, type Degrees} from "./types"
 
 import Toolbar from '../components/Toobar'
 import BasicStatTable from "../components/BasicStatTable";
@@ -40,51 +41,12 @@ const levelCaps: LevelCaps= {
 }
 
 export default function App() {
-  const [settings, setSettings] = useState<Settings>(defaultSettings)
   const [stats, setStats] = useState<Stats>(defaultStats);
-  const [currentAbilities, setCurrentAbilities] = useState<RenderedAbility[]>([])
   const [showImagePopup, setShowImagePopup] = useState(false)
-  const [currentDamageAffinities, setCurrentDamageAffinities] = useState<string[]>([])
-  const [currentSpells, setCurrentSpells] = useState<string[]>([])
 
-  const { darkMode } = settings
-
-  // Update currentSpells and currentDamageAffinities whenever the abilities list changes
-  useEffect(() => {
-    let affinities: string[] = []
-    let spells: string[] = []
-
-    currentAbilities.forEach(ability => {
-      if(isNotNil(ability.spells) && isNotEmpty(ability.spells)){
-        spells = [...spells, ...ability.spells]
-      }
-
-      if(ability.name == "Damage Affinity" && isNotNil(ability.dropdownSelection)){
-        affinities.push(ability.dropdownSelection)
-      }
-    })
-
-    if(affinities.length == 0){
-      affinities = ["no affinities"]
-    }
-
-    if(spells.length == 0){
-      spells = ["no known spells"]
-    }
-
-    setCurrentDamageAffinities(affinities)
-    setCurrentSpells(spells)
-  }, [currentAbilities])
-
-  const handleSettingChange = (
-    key: string,
-    value: boolean,
-  ) => {
-    setSettings((prev) => ({
-        ...prev,
-        [key]: value,
-      }))
-  }
+  const darkMode = useSelector(
+    (state: RootState) => state.settings.darkMode
+  )
 
   const handleStatChange = (
     category: keyof Stats,
@@ -144,13 +106,9 @@ export default function App() {
 
   return (
     <div className={darkMode ? "app dark" : "app light"}>
-      <Toolbar 
-      settings={settings}
-      setSettings={handleSettingChange}
+      <Toolbar
       stats={stats} setStats={setStats}
-      currentAbilities={currentAbilities}
-      setCurrentAbilities={setCurrentAbilities}
-      ></Toolbar>
+      />
 
       {/* Scrollable main content */}
       <main className="main-content">
@@ -195,14 +153,14 @@ export default function App() {
             </div>
             <div className="middle-top">
               <div className="mints-spacer"></div>
-              <SecondaryStatTable stats={stats} setStats={handleStatChangeString} abilities={currentAbilities}></SecondaryStatTable>
+              <SecondaryStatTable stats={stats} setStats={handleStatChangeString}/>
               <br />
-              <BasicStatTable stats={stats} setStats={handleStatChange}></BasicStatTable>
+              <BasicStatTable stats={stats} setStats={handleStatChange}/>
             </div>
 
             {/* Row 2 (skills table spans 2 columns) */}
             <div className="skill-table-holder">
-              <SkillsTable stats={stats} setStats={handleStatChange} settings={settings}></SkillsTable>
+              <SkillsTable stats={stats} setStats={handleStatChange}/>
             </div>
             
           </div>
@@ -212,11 +170,7 @@ export default function App() {
             <div className="mints-spacer" />
             <div className="name-row">
               <AbilityButton 
-                currentAbilities={currentAbilities} 
-                setCurrentAbilities={setCurrentAbilities} 
                 stats={stats}
-                currentDamageAffinities={currentDamageAffinities}
-                currentSpells={currentSpells}
               />
               <button 
                 className="ability-button" 
@@ -231,8 +185,8 @@ export default function App() {
               </button>
             </div>
             <hr />
-            <AbilityZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} />
-            <AbilityZone flawsZone currentAbilities={currentAbilities} setCurrentAbilities={setCurrentAbilities} />
+            <AbilityZone/>
+            <AbilityZone flawsZone/>
             <NoteZone stats={stats} handleStatChangeString={handleStatChangeString} />
             <div className="mints-spacer" />
           </div>

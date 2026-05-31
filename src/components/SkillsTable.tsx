@@ -1,11 +1,17 @@
 import "../styles/App.css";
-import { type Stats, skillGroups, type Settings, type RenderSkill } from "../app/types"
+import { useSelector } from "react-redux";
+import { type RootState } from "../app/store";
+import { type Stats, skillGroups, type RenderSkill } from "../app/types"
 import { capitalFirst, baseStatToShorthand } from "../lib/util";
 
 
-export default function SkillsTable({stats, setStats, settings}: {stats: Stats, setStats: Function, settings: Settings}){
+export default function SkillsTable({stats, setStats}: {stats: Stats, setStats: Function}){
+    const showAssociatedStat = useSelector(
+      (state: RootState) => state.settings.showAssociatedStat
+    )
+
     const showSkillStat = ({assocStat}: RenderSkill) => {
-        if(!settings.showAssociatedStat){
+        if(!showAssociatedStat){
             return ""
         }
         return ` (${baseStatToShorthand(assocStat)})`

@@ -1,8 +1,13 @@
+import { useDispatch } from "react-redux";
+import { RemoveAbility } from "../redux/abilitiesSlice";
+
 import { type RenderedAbility } from "../assets/abilityList"
 import { formatAbilityEnhancement } from "../lib/reactUtil"
 import { abilityCostFormatter, capitalFirst } from "../lib/util"
 
-export function AbilityBlock({myAbility, removeAbility}: {myAbility: RenderedAbility, removeAbility: Function}){
+export function AbilityBlock({myAbility}: {myAbility: RenderedAbility}){
+    const dispatch = useDispatch()
+
     const abilityEnhancements = () => {
         const {enhancements, appliedEnhancementsList, enhancementMode} = myAbility
 
@@ -41,7 +46,7 @@ export function AbilityBlock({myAbility, removeAbility}: {myAbility: RenderedAbi
 
     return (
         <li key={myAbility.id}>
-            <button className={"delete-ability"} onClick={() => {removeAbility()}}>X</button>
+            <button className={"delete-ability"} onClick={() => {dispatch(RemoveAbility(myAbility))}}>X</button>
             <b>{myAbility.name} {abilityCostFormatter(myAbility.cost, myAbility.degree)}&nbsp;-&nbsp;{abilitySelectionFormatter()}</b>
             {myAbility.description}
             {abilityEnhancements()}

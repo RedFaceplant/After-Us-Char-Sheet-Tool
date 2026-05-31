@@ -1,4 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { type RootState } from "../app/store";
+import { addAbility } from "../redux/abilitiesSlice";
+
 import ConfirmDialog from "../lib/ConfirmDialog";
 import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityEnhancement, type EnhancementModes} from "../assets/abilityList"
 import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst, booleansRequirePrevious, sizeOrder } from "../lib/util";
@@ -7,17 +11,9 @@ import { formatAbilityEnhancement } from "../lib/reactUtil";
 import AbilityGenericDropdown from "./AbilityGenericDropdown";
 
 export default function AbilityButton({
-        currentAbilities, 
-        setCurrentAbilities, 
         stats, 
-        currentDamageAffinities, 
-        currentSpells
     }: {
-        currentAbilities: RenderedAbility[], 
-        setCurrentAbilities: Function, 
         stats: Stats, 
-        currentDamageAffinities: string[], 
-        currentSpells: string[]
     }){
     const [showAbilitySelect, setShowAbilitySelect] = useState(false); // The actual pop up menu showing
     const [selectedGroup, setSelectedGroup] = useState<Categories>("combat" as const) // The selected catergory
@@ -27,6 +23,10 @@ export default function AbilityButton({
     const [warningMode, setWarningMode] = useState("prereq"); // Controls what the pop up warning will say
     const [abilityDropdownSelection, setAbilityDropdownSelection] = useState("null"); // Dropdown on abilities that use it
 
+    const currentAbilities = useSelector(
+      (state: RootState) => state.currentAbilities.abilities
+    )
+    const dispatch = useDispatch()
 
     // Update the abilities dropdown whenever the group dropdown changes
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function AbilityButton({
     }
 
     // All the checks and logic that goes into actually adding an ability onto the sheet
-    const addAbility = () => {
+    const checkAndAddAbility = () => {
         // Make the pop-up hide
         setShowAbilitySelect(false);
 
@@ -159,7 +159,7 @@ export default function AbilityButton({
         }
 
         // Actually add the ability into the list
-        setCurrentAbilities([...currentAbilities, convertedAbility])
+        dispatch(addAbility(convertedAbility))
     }
 
     const abilityEnhancementOptions = (enhancements: AbilityEnhancement[], enhancementMode: EnhancementModes = "none") => {
@@ -201,8 +201,6 @@ export default function AbilityButton({
                     optionSelected={abilityDropdownSelection} 
                     setOptionSelected={setAbilityDropdownSelection} 
                     dropdownMode={dropdownMode}
-                    currentDamageAffinities={currentDamageAffinities}
-                    currentSpells={currentSpells}
                 />
                 <span>{description ?? '(Select an Ability)'}</span>
                 {enhancements ? abilityEnhancementOptions(enhancements, enhancementMode) : <></>}
@@ -219,7 +217,7 @@ export default function AbilityButton({
             }
         }>Add Ability</button>
         <ConfirmDialog abilityModal={true} showConfirm={showAbilitySelect} onConfirm={() => {
-            addAbility()
+            checkAndAddAbility()
         }} onCancel={() => {
             setShowAbilitySelect(false)
         }}>

@@ -1,23 +1,24 @@
 import { type DropdownModes, DROPDOWNS } from '../assets/abilityList'
 import { capitalFirst } from '../lib/util'
+import { getCurrentSpells, getDamageAffinities } from '../redux/selectors'
+import { useAppSelector } from '../redux/hooks'
 
 export default function AbilityGenericDropdown({
         optionSelected, 
         setOptionSelected, 
         dropdownMode,
-        currentDamageAffinities,
-        currentSpells,
     }: {
         optionSelected: string, 
         setOptionSelected: Function, 
         dropdownMode: DropdownModes | undefined,
-        currentDamageAffinities: string[], 
-        currentSpells: string[]
     }){
 
     if(!dropdownMode || dropdownMode == "none"){
         return (<></>)
     }
+
+    const currentDamageAffinities = useAppSelector(getDamageAffinities)
+    const currentSpells = useAppSelector(getCurrentSpells)
 
     const Dropdowns = {
         ...DROPDOWNS,

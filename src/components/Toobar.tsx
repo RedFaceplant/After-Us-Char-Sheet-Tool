@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { type RootState } from "../app/store";
+import { setSettings } from "../redux/settingsSlice";
+
 import ConfirmDialog from "../lib/ConfirmDialog";
-import { type Settings, type Stats, defaultStats } from "../app/types";
+import { type Stats, defaultStats } from "../app/types";
 import { type RenderedAbility } from "../assets/abilityList";
 import { toKebabCase } from "../lib/util";
 
@@ -55,9 +59,15 @@ const importData = (
 };
 
 
-export default function Toolbar({settings, setSettings, stats, setStats, currentAbilities, setCurrentAbilities} : {settings: Settings, setSettings: Function, stats: Stats, setStats: Function, currentAbilities: RenderedAbility[], setCurrentAbilities: Function}){
+export default function Toolbar({stats, setStats} : {stats: Stats, setStats: Function}){
     const [showNewCharDialog, setShowNewCharDialog] = useState(false);
     const [showImportDialog, setShowImportDialog] = useState(false)
+
+    const dispatch = useDispatch()
+
+    const settings = useSelector(
+      (state: RootState) => state.settings
+    )
     const { darkMode, showAssociatedStat } = settings
 
     return (
@@ -65,8 +75,8 @@ export default function Toolbar({settings, setSettings, stats, setStats, current
         <div className="toolbar-left">
           <b>After Us Assistant </b>
           <button onClick={() => setShowNewCharDialog(true)}>New Sheet</button>
-          <button onClick={() => exportData(stats, currentAbilities)}>Export</button>
-          <button onClick={() => setShowImportDialog(true)}>Import</button>
+          {/* <button onClick={() => exportData(stats)}>Export</button> */}
+          {/* <button onClick={() => setShowImportDialog(true)}>Import</button> */}
           <ConfirmDialog
             confirmText=""
             onConfirm={() => console.log("whoops")}
@@ -84,7 +94,7 @@ export default function Toolbar({settings, setSettings, stats, setStats, current
                   const file = e.target.files?.[0];
                   if (file){
                     setShowImportDialog(false)
-                    importData(file, setStats, setCurrentAbilities)
+                    // importData(file, setStats, setCurrentAbilities)
                   }
                 }}>
               </input>
@@ -97,7 +107,9 @@ export default function Toolbar({settings, setSettings, stats, setStats, current
             <input
               type="checkbox"
               checked={showAssociatedStat}
-              onChange={() => setSettings("showAssociatedStat", !showAssociatedStat)}
+              onChange={
+                (e) => dispatch(setSettings({showAssociatedStat: e.target.checked}))
+              }
             />
           </label>
           <label>
@@ -105,15 +117,17 @@ export default function Toolbar({settings, setSettings, stats, setStats, current
             <input
               type="checkbox"
               checked={darkMode}
-              onChange={() => setSettings("darkMode", !darkMode)}
+              onChange={
+                (e) => dispatch(setSettings({darkMode: e.target.checked}))
+              }
             />
           </label>
           <div className="copyright">&copy; King 2026</div>
         </div>
         <ConfirmDialog showConfirm={showNewCharDialog} onConfirm={() => {
           setShowNewCharDialog(false),
-          setStats(defaultStats),
-          setCurrentAbilities([])
+          setStats(defaultStats)
+          // setCurrentAbilities([])
         }} onCancel={() => setShowNewCharDialog(false)}>Are you sure you want to make a new character sheet?<br />This will not save your current sheet.</ConfirmDialog>
       </header>
     )
