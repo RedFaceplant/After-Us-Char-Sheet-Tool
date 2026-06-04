@@ -1,15 +1,26 @@
-import "../styles/App.css";
-import { type Stats } from "../app/types";
+import { useSelector, useDispatch } from "react-redux";
+import { type RootState } from "../app/store";
+import { setMetaInfo } from "../redux/metaSlice";
 
-export default function NoteZone({stats, handleStatChangeString}: {stats: Stats, handleStatChangeString: Function}){
+import "../styles/App.css";
+
+export default function NoteZone(){
+    const dispatch = useDispatch()
+    
+    const notes = useSelector(
+      (state: RootState) => state.metaInfo.notes
+    )
+
     return(
         <div className="note-zone">
             Notes:
             <br />
             <textarea 
             className="note-input"
-            value={stats.metaStats.notes}
-            onChange={e => handleStatChangeString("metaStats", "notes", e.target.value as string)}/>
+            value={notes}
+            onChange={e => dispatch(setMetaInfo({
+                notes: e.target.value
+            }))}/>
         </div>
     )
 }

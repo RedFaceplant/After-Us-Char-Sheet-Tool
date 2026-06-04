@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { clamp } from "ramda"
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "./store";
+import { setMetaInfo } from "../redux/metaSlice";
 
 import "../styles/App.css";
-import {type Stats, defaultStats, type Degrees} from "./types"
+import {type Stats, defaultStats, defaultMetaInfo, type Degrees} from "./types"
 
 import Toolbar from '../components/Toobar'
 import BasicStatTable from "../components/BasicStatTable";
@@ -41,11 +42,17 @@ const levelCaps: LevelCaps= {
 }
 
 export default function App() {
+  const dispatch = useDispatch()
+
   const [stats, setStats] = useState<Stats>(defaultStats);
   const [showImagePopup, setShowImagePopup] = useState(false)
 
   const darkMode = useSelector(
     (state: RootState) => state.settings.darkMode
+  )
+
+  const {degree, imageUrl, name} = useSelector(
+    (state: RootState) => state.metaInfo
   )
 
   const handleStatChange = (
@@ -55,33 +62,18 @@ export default function App() {
   ) => {
     switch (category){
       case "baseStats":{
-        value = clamp(0, levelCaps[stats.characterInfo.degree].basic, value);
+        value = clamp(0, levelCaps[degree].basic, value);
         break;
       }
       case "skillGroups":{
-        value = clamp(0, levelCaps[stats.characterInfo.degree].group, value);
+        value = clamp(0, levelCaps[degree].group, value);
         break;
       }
       case "skills":{
-        value = clamp(0, levelCaps[stats.characterInfo.degree].skill, value);
+        value = clamp(0, levelCaps[degree].skill, value);
         break;
       }
     }
-    setStats((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        [key]: value,
-      },
-    }));
-  };
-
-  const handleStatChangeString = (
-    category: keyof Stats,
-    key: string,
-    value: string
-  ) => {
-    
     setStats((prev) => ({
       ...prev,
       [category]: {
@@ -95,11 +87,15 @@ export default function App() {
     const { value } = document.getElementById("imageURL") as HTMLInputElement
 
     if(!value){
-      handleStatChangeString("metaStats", "image", defaultStats.metaStats.image)
+      dispatch(setMetaInfo({
+        imageUrl: defaultMetaInfo.imageUrl
+      }))
       return
     }
 
-    handleStatChangeString("metaStats", "image", value)
+    dispatch(setMetaInfo({
+      imageUrl: value
+    }))
   }
 
 
@@ -122,14 +118,14 @@ export default function App() {
                   type="text"
                   placeholder="Character Name"
                   className="character-name"
-                  value={stats.metaStats.name}
-                  onChange={e => handleStatChangeString("metaStats", "name", e.target.value as string)}
+                  value={name}
+                  onChange={e => dispatch(setMetaInfo({name: e.target.value}))}
                 />
               </div>
               <hr />
               <div className="char-image">
                 <img 
-                  src={stats.metaStats.image}
+                  src={imageUrl}
                   onClick={
                     () => setShowImagePopup(true)
                   } />
@@ -146,14 +142,14 @@ export default function App() {
                     <label className="image-url">
                       <b>Set Image URL</b>
                       <br/>
-                      <input id="imageURL" type={"text"} defaultValue={stats.metaStats.image} />
+                      <input id="imageURL" type={"text"} defaultValue={imageUrl} />
                     </label>
                   </ConfirmDialog>
               </div>
             </div>
             <div className="middle-top">
               <div className="mints-spacer"></div>
-              <SecondaryStatTable stats={stats} setStats={handleStatChangeString}/>
+              <SecondaryStatTable stats={stats}/>
               <br />
               <BasicStatTable stats={stats} setStats={handleStatChange}/>
             </div>
@@ -187,7 +183,7 @@ export default function App() {
             <hr />
             <AbilityZone/>
             <AbilityZone flawsZone/>
-            <NoteZone stats={stats} handleStatChangeString={handleStatChangeString} />
+            <NoteZone/>
             <div className="mints-spacer" />
           </div>
         </div>

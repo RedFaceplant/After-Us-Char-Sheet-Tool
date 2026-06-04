@@ -1,7 +1,9 @@
+import { useSelector, useDispatch } from "react-redux";
+import { type RootState } from "../app/store";
+import { setMetaInfo } from "../redux/metaSlice";
+
 import "../styles/App.css";
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { type RootState } from "../app/store";
 
 import {type Stats, type Sizes, sizeModifiers} from "../app/types"
 import {calculateXP} from '../lib/xpCalculation'
@@ -43,14 +45,20 @@ const trackedAbilities = [
   "Extra Magic Limit",
 ];
 
-export default function SecondaryStatTable({stats, setStats}: {stats: Stats, setStats: Function}){
-    const { baseStats, characterInfo: { size, modifier, degree } } = stats
+export default function SecondaryStatTable({stats}: {stats: Stats}){
+    const dispatch = useDispatch()
+
+    const {size, modifier, degree} = useSelector(
+      (state: RootState) => state.metaInfo
+    )
+
+    const { baseStats } = stats
 
     const abilities = useSelector(
       (state: RootState) => state.currentAbilities.abilities
     )
 
-    const xp = useMemo(() => calculateXP(stats, abilities), [stats, abilities]);
+    const xp = useMemo(() => calculateXP(stats, size, abilities), [stats, size, abilities]);
 
     const abilityCounts = countSelectedAbilities(abilities, trackedAbilities)
 
@@ -81,8 +89,8 @@ export default function SecondaryStatTable({stats, setStats}: {stats: Stats, set
         <td>
             <select
             className="size-select"
-            value={stats.characterInfo.size}
-            onChange={e => setStats("characterInfo", "size", e.target.value as Sizes)}
+            value={size}
+            onChange={e => dispatch(setMetaInfo({ size: e.target.value as Sizes}))}
             >
             {sizeOptions.map(size => (
                 <option key={size} value={size}>

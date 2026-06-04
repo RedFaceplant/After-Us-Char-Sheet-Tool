@@ -10,11 +10,9 @@ import { type Stats } from "../app/types";
 import { formatAbilityEnhancement } from "../lib/reactUtil";
 import AbilityGenericDropdown from "./AbilityGenericDropdown";
 
-export default function AbilityButton({
-        stats, 
-    }: {
-        stats: Stats, 
-    }){
+export default function AbilityButton({ stats }: { stats: Stats }){
+    const dispatch = useDispatch()
+
     const [showAbilitySelect, setShowAbilitySelect] = useState(false); // The actual pop up menu showing
     const [selectedGroup, setSelectedGroup] = useState<Categories>("combat" as const) // The selected catergory
     const [options, setOptions] = useState<string[]>([]); // All abilities in the selected catergory
@@ -26,7 +24,10 @@ export default function AbilityButton({
     const currentAbilities = useSelector(
       (state: RootState) => state.currentAbilities.abilities
     )
-    const dispatch = useDispatch()
+
+    const {degree, size} = useSelector(
+      (state: RootState) => state.metaInfo
+    )
 
     // Update the abilities dropdown whenever the group dropdown changes
     useEffect(() => {
@@ -64,7 +65,7 @@ export default function AbilityButton({
 
         // Size Prereq
         if(prereqs.smallerThan){
-            return sizeOrder[stats.characterInfo.size] < sizeOrder[prereqs.smallerThan]
+            return sizeOrder[size] < sizeOrder[prereqs.smallerThan]
         }
 
         // Check if ability prereqs are met
@@ -89,7 +90,7 @@ export default function AbilityButton({
         }
 
         // Does the character meet the degree requirement for this ability?
-        if(fullAbility.degree && !degreeRequirementMet(stats.characterInfo.degree, fullAbility.degree)){
+        if(fullAbility.degree && !degreeRequirementMet(degree, fullAbility.degree)){
             setWarningMode("degree")
             setShowPrereqWarning(true)
             return
@@ -131,7 +132,7 @@ export default function AbilityButton({
                 const checkbox = document.getElementById(`${selectedAbility}-${index}`) as HTMLInputElement
                 buttonStatus[index] = checkbox.checked
 
-                if(checkbox.checked && !degreeRequirementMet(stats.characterInfo.degree, enhancement.degree ?? "normal")){
+                if(checkbox.checked && !degreeRequirementMet(degree, enhancement.degree ?? "normal")){
                     stopFlag = true
                 }
             })

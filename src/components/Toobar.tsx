@@ -1,7 +1,8 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../app/store";
 import { setSettings } from "../redux/settingsSlice";
+
+import { useState } from "react";
 
 import ConfirmDialog from "../lib/ConfirmDialog";
 import { type Stats, defaultStats } from "../app/types";
@@ -10,6 +11,10 @@ import { toKebabCase } from "../lib/util";
 
 
 const exportData = (stats: Stats, abilities: RenderedAbility[]) => {
+  const metaInfo = useSelector(
+    (state: RootState) => state.metaInfo
+  )
+
   const data = {
     exportedAt: new Date().toISOString(),
     toolVersion: 0,
@@ -24,7 +29,7 @@ const exportData = (stats: Stats, abilities: RenderedAbility[]) => {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${toKebabCase(stats.metaStats.name ?? "Unnamed")}-After-Us-data.json`;
+  a.download = `${toKebabCase(metaInfo.name ?? "Unnamed")}-After-Us-data.json`;
   a.click();
 
   URL.revokeObjectURL(url);
@@ -60,10 +65,10 @@ const importData = (
 
 
 export default function Toolbar({stats, setStats} : {stats: Stats, setStats: Function}){
+    const dispatch = useDispatch()
+
     const [showNewCharDialog, setShowNewCharDialog] = useState(false);
     const [showImportDialog, setShowImportDialog] = useState(false)
-
-    const dispatch = useDispatch()
 
     const settings = useSelector(
       (state: RootState) => state.settings

@@ -1,11 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import settingsReducer from "../redux/settingsSlice";
 import abilitiesReducer from "../redux/abilitiesSlice";
+import metaInfoReducer from "../redux/metaSlice";
+
 
 export const store = configureStore({
   reducer: {
     settings: settingsReducer,
-    currentAbilities: abilitiesReducer
+    currentAbilities: abilitiesReducer,
+    metaInfo: metaInfoReducer
   },
 });
 

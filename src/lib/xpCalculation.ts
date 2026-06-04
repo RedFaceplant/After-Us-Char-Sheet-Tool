@@ -1,4 +1,4 @@
-import { type Stats, sizeModifiers }  from "../app/types"
+import { type Stats, sizeModifiers, type Sizes }  from "../app/types"
 import { type RenderedAbility } from "../assets/abilityList"
 
 function baseStatLevelToXP(n: number): number {
@@ -29,11 +29,11 @@ function skillLevelToXP(n: number): number {
   );
 }
 
-export function calculateXP(stats: Stats, abilities: RenderedAbility[]){
+export function calculateXP(stats: Stats, size: Sizes, abilities: RenderedAbility[]){
     const {baseStats, skillGroups, skills} = stats
     let count = 0
 
-    count += sizeModifiers[stats.characterInfo.size].xpModifier
+    count += sizeModifiers[size].xpModifier
 
     for(let baseStat of Object.keys(baseStats)){
         count += baseStatLevelToXP(baseStats[baseStat])

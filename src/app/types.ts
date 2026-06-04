@@ -22,15 +22,26 @@ export const defaultSettings: Settings = {
 export type Degrees = "normal" | "amazing" | "epic" | "divine"
 
 /**
- * Character information that needs to be saved with the sheet but has no function in the After Us rules.
- * @param name The text in the name field
- * @param notes The text in the notes field
- * @param image The Image URL
+ * Character information that needs to be saved with the sheet and also calculated outputs.
  */
-export type MetaStats = {
+export type MetaInfo = {
   name: string,
   notes: string,
-  image: string,
+  imageUrl: string,
+  size: Sizes,
+  xp: number,
+  modifier: string,
+  degree: Degrees,
+}
+
+export const defaultMetaInfo: MetaInfo = {
+  name: "",
+  notes: "",
+  imageUrl: "./placeholder-image.png",
+  size: "medium",
+  xp: 0,
+  modifier: "n/a",
+  degree: "normal"
 }
 
 export type Sizes = "tiny" | "small" | "medium" | "big" | "huge" | "colossal"
@@ -89,33 +100,12 @@ export type SkillId = typeof skills[number];
 export type Skills = Record<SkillId, number>;
 
 /**
- * Stats that are caclulated as a result of Base Stats, Skills, and Abilities. Also houses the Player's Model.
- * This data is NOT stored in a Player JSON file directly, and is instead calcuated by the app.
- */
-export type SecondaryStats = {
-    size: Sizes,
-    healthPoints: number,
-    fatigueLimit: number,
-    aetherLimit: number,
-    defence: number,
-    movement: number,
-    model: string,
-}
-
-/**
  * Stat data that IS stored in a Player JSON file directly along side the Ability list.
  */
 export type Stats = {
     baseStats: BaseStats,
     skillGroups: SkillGroups,
     skills: Skills,
-    characterInfo: {
-      size: Sizes,
-      xp: number,
-      modifier: string,
-      degree: Degrees,
-    }
-    metaStats: MetaStats
 }
 
 export const defaultStats: Stats = {
@@ -160,17 +150,6 @@ export const defaultStats: Stats = {
         tracking: 1,
         will: 1,
     },
-    characterInfo: {
-        size: "medium",
-        xp: 0,
-        modifier: "n/a",
-        degree: "normal"
-    },
-    metaStats: {
-      name: "",
-      notes: "",
-      image: "./placeholder-image.png"
-    }
 }
 
 export type RenderSkill = { id: SkillId; label: string, assocStat: BaseStatsId }
