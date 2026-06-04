@@ -1,11 +1,12 @@
+import "../styles/App.css";
+
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../app/store";
 import { setMetaInfo } from "../redux/metaSlice";
 
-import "../styles/App.css";
 import { useMemo } from "react";
 
-import {type Stats, type Sizes, sizeModifiers} from "../app/types"
+import {type Sizes, sizeModifiers} from "../app/types"
 import {calculateXP} from '../lib/xpCalculation'
 import type { RenderedAbility } from "../assets/abilityList";
 import { capitalFirst } from "../lib/util"
@@ -45,14 +46,17 @@ const trackedAbilities = [
   "Extra Magic Limit",
 ];
 
-export default function SecondaryStatTable({stats}: {stats: Stats}){
+export default function SecondaryStatTable(){
     const dispatch = useDispatch()
+
+    const stats = useSelector(
+      (state: RootState) => state.stats
+    )
+    const { baseStats } = stats
 
     const {size, modifier, degree} = useSelector(
       (state: RootState) => state.metaInfo
     )
-
-    const { baseStats } = stats
 
     const abilities = useSelector(
       (state: RootState) => state.currentAbilities.abilities

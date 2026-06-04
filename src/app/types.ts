@@ -46,7 +46,7 @@ export const defaultMetaInfo: MetaInfo = {
 
 export type Sizes = "tiny" | "small" | "medium" | "big" | "huge" | "colossal"
 
-const baseStats = [
+export const baseStats = [
   "strength",
   "agility",
   "vigor",
@@ -65,8 +65,8 @@ export const skillGroupNames = [
   "charisma",
 ] as const
 
-type GroupId = typeof skillGroupNames[number];
-type SkillGroups = Record<GroupId, number>;
+export type GroupId = typeof skillGroupNames[number];
+export type SkillGroups = Record<GroupId, number>;
 
 export const skills = [
   "acrobatics",

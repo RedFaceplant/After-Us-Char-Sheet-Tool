@@ -1,11 +1,20 @@
 import "../styles/App.css";
-import { useSelector } from "react-redux";
 import { type RootState } from "../app/store";
-import { type Stats, skillGroups, type RenderSkill } from "../app/types"
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../redux/hooks";
+import { updateSkillGroup, updateSkill } from "../redux/statsThunks";
+
+import { skillGroups, type RenderSkill, type GroupId } from "../app/types"
 import { capitalFirst, baseStatToShorthand } from "../lib/util";
 
 
-export default function SkillsTable({stats, setStats}: {stats: Stats, setStats: Function}){
+export default function SkillsTable(){
+    const dispatch = useAppDispatch()
+    
+    const stats = useSelector(
+        (state: RootState) => state.stats
+    )
+
     const showAssociatedStat = useSelector(
       (state: RootState) => state.settings.showAssociatedStat
     )
@@ -35,10 +44,7 @@ export default function SkillsTable({stats, setStats}: {stats: Stats, setStats: 
                             type="number"
                             value={stats.skillGroups[group.group] ?? ""}
                             onChange={(e) =>
-                                setStats(
-                                "skillGroups", group.group,
-                                Number(e.target.value)
-                                )
+                                dispatch(updateSkillGroup(group.group as GroupId, Number(e.target.value)))
                             }
                             />
                             </div>
@@ -69,10 +75,7 @@ export default function SkillsTable({stats, setStats}: {stats: Stats, setStats: 
                             type="number"
                             value={stats.skills[skill.id] ?? ""}
                             onChange={(e) =>
-                                setStats(
-                                "skills", skill.id,
-                                Number(e.target.value)
-                                )
+                                dispatch(updateSkill(skill.id, Number(e.target.value)))
                             }
                             />
                         </div>

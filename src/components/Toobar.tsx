@@ -1,25 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../app/store";
 import { setSettings } from "../redux/settingsSlice";
+import { setStats } from "../redux/statsSlice";
 
 import { useState } from "react";
 
 import ConfirmDialog from "../lib/ConfirmDialog";
-import { type Stats, defaultStats } from "../app/types";
+import { defaultStats, defaultMetaInfo, type Stats, type MetaInfo } from "../app/types";
 import { type RenderedAbility } from "../assets/abilityList";
 import { toKebabCase } from "../lib/util";
+import { clearAbilities, setAbilities } from "../redux/abilitiesSlice";
+import { setMetaInfo } from "../redux/metaSlice";
 
 
-const exportData = (stats: Stats, abilities: RenderedAbility[]) => {
-  const metaInfo = useSelector(
-    (state: RootState) => state.metaInfo
-  )
-
+const exportData = ({stats, abilities, metaInfo}: {stats: Stats, abilities: RenderedAbility[], metaInfo: MetaInfo}) => {
   const data = {
     exportedAt: new Date().toISOString(),
-    toolVersion: 0,
+    toolVersion: 1,
     stats,
-    abilities
+    abilities,
+    metaInfo
   };
 
   const json = JSON.stringify(data, null, 2);
@@ -38,8 +38,7 @@ const exportData = (stats: Stats, abilities: RenderedAbility[]) => {
 
 const importData = (
   file: File,
-  setStats: Function,
-  setAbilities: Function
+  dispatch: any
 ) => {
   const reader = new FileReader();
 
@@ -52,8 +51,19 @@ const importData = (
         throw new Error("Invalid file format");
       }
 
-      setStats(parsed.stats);
-      setAbilities(parsed.abilities);
+      let metaInfo = defaultMetaInfo
+
+      if(parsed.toolVersion == 0){
+        console.log(parsed)
+        metaInfo = {...parsed.stats.characterInfo, ...parsed.stats.metaStats}
+      }
+      else{
+        metaInfo = parsed.metaInfo ?? defaultMetaInfo
+      }
+
+      dispatch(setStats(parsed.stats))
+      dispatch(setAbilities(parsed.abilities))
+      dispatch(setMetaInfo(metaInfo))
     } catch (err) {
       console.error(err);
       alert(`Failed to import file.\nMessage: '${err}'`);
@@ -64,7 +74,7 @@ const importData = (
 };
 
 
-export default function Toolbar({stats, setStats} : {stats: Stats, setStats: Function}){
+export default function Toolbar(){
     const dispatch = useDispatch()
 
     const [showNewCharDialog, setShowNewCharDialog] = useState(false);
@@ -75,13 +85,23 @@ export default function Toolbar({stats, setStats} : {stats: Stats, setStats: Fun
     )
     const { darkMode, showAssociatedStat } = settings
 
+    const metaInfo = useSelector(
+      (state: RootState) => state.metaInfo
+    )
+    const stats = useSelector(
+      (state: RootState) => state.stats
+    )
+    const abilities = useSelector(
+      (state: RootState) => state.currentAbilities.abilities
+    )
+
     return (
         <header className="toolbar">
         <div className="toolbar-left">
           <b>After Us Assistant </b>
           <button onClick={() => setShowNewCharDialog(true)}>New Sheet</button>
-          {/* <button onClick={() => exportData(stats)}>Export</button> */}
-          {/* <button onClick={() => setShowImportDialog(true)}>Import</button> */}
+          <button onClick={() => exportData({metaInfo, stats, abilities})}>Export</button>
+          <button onClick={() => setShowImportDialog(true)}>Import</button>
           <ConfirmDialog
             confirmText=""
             onConfirm={() => console.log("whoops")}
@@ -99,7 +119,7 @@ export default function Toolbar({stats, setStats} : {stats: Stats, setStats: Fun
                   const file = e.target.files?.[0];
                   if (file){
                     setShowImportDialog(false)
-                    // importData(file, setStats, setCurrentAbilities)
+                    importData(file, dispatch)
                   }
                 }}>
               </input>
@@ -131,8 +151,9 @@ export default function Toolbar({stats, setStats} : {stats: Stats, setStats: Fun
         </div>
         <ConfirmDialog showConfirm={showNewCharDialog} onConfirm={() => {
           setShowNewCharDialog(false),
-          setStats(defaultStats)
-          // setCurrentAbilities([])
+          dispatch(setStats(defaultStats))
+          dispatch(setMetaInfo(defaultMetaInfo))
+          dispatch(clearAbilities())
         }} onCancel={() => setShowNewCharDialog(false)}>Are you sure you want to make a new character sheet?<br />This will not save your current sheet.</ConfirmDialog>
       </header>
     )

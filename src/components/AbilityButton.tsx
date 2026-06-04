@@ -6,11 +6,10 @@ import { addAbility } from "../redux/abilitiesSlice";
 import ConfirmDialog from "../lib/ConfirmDialog";
 import {type Categories, type RenderedAbility, abilities, type Ability, type AbilityEnhancement, type EnhancementModes} from "../assets/abilityList"
 import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst, booleansRequirePrevious, sizeOrder } from "../lib/util";
-import { type Stats } from "../app/types";
 import { formatAbilityEnhancement } from "../lib/reactUtil";
 import AbilityGenericDropdown from "./AbilityGenericDropdown";
 
-export default function AbilityButton({ stats }: { stats: Stats }){
+export default function AbilityButton(){
     const dispatch = useDispatch()
 
     const [showAbilitySelect, setShowAbilitySelect] = useState(false); // The actual pop up menu showing
@@ -27,6 +26,10 @@ export default function AbilityButton({ stats }: { stats: Stats }){
 
     const {degree, size} = useSelector(
       (state: RootState) => state.metaInfo
+    )
+
+    const {baseStats, skills} = useSelector(
+      (state: RootState) => state.stats
     )
 
     // Update the abilities dropdown whenever the group dropdown changes
@@ -51,14 +54,14 @@ export default function AbilityButton({ stats }: { stats: Stats }){
 
         // Check all base stats on prereqs
         for(const baseStat in prereqs.base){
-            if(stats.baseStats[baseStat] < prereqs.base[baseStat]){
+            if(baseStats[baseStat] < prereqs.base[baseStat]){
                 return false
             }
         }
 
         // Check all skills on prereqs
         for(const skill in prereqs.skill){
-            if(stats.skills[skill] < prereqs.skill[skill]){
+            if(skills[skill] < prereqs.skill[skill]){
                 return false
             }
         }

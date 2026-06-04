@@ -1,11 +1,11 @@
+import "../styles/App.css";
+
 import { useState } from "react";
-import { clamp } from "ramda"
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "./store";
 import { setMetaInfo } from "../redux/metaSlice";
 
-import "../styles/App.css";
-import {type Stats, defaultStats, defaultMetaInfo, type Degrees} from "./types"
+import {defaultMetaInfo} from "./types"
 
 import Toolbar from '../components/Toobar'
 import BasicStatTable from "../components/BasicStatTable";
@@ -16,72 +16,18 @@ import SkillsTable from "../components/SkillsTable";
 import AbilityButton from "../components/AbilityButton"
 import ConfirmDialog from "../lib/ConfirmDialog";
 
-type LevelCaps = Record<Degrees, {basic: number, group: number, skill: number}>
-
-const levelCaps: LevelCaps= {
-  normal: {
-    basic: 20,
-    group: 5,
-    skill: 10,
-  },
-  amazing: {
-    basic: 30,
-    group: 10,
-    skill: 15,
-  },
-  epic: {
-    basic: 40,
-    group: 15,
-    skill: 15,
-  },
-  divine: {
-    basic: 40,
-    group: 15,
-    skill: 15,
-  }
-}
 
 export default function App() {
   const dispatch = useDispatch()
-
-  const [stats, setStats] = useState<Stats>(defaultStats);
   const [showImagePopup, setShowImagePopup] = useState(false)
 
   const darkMode = useSelector(
     (state: RootState) => state.settings.darkMode
   )
 
-  const {degree, imageUrl, name} = useSelector(
+  const {imageUrl, name} = useSelector(
     (state: RootState) => state.metaInfo
   )
-
-  const handleStatChange = (
-    category: keyof Stats,
-    key: string,
-    value: number
-  ) => {
-    switch (category){
-      case "baseStats":{
-        value = clamp(0, levelCaps[degree].basic, value);
-        break;
-      }
-      case "skillGroups":{
-        value = clamp(0, levelCaps[degree].group, value);
-        break;
-      }
-      case "skills":{
-        value = clamp(0, levelCaps[degree].skill, value);
-        break;
-      }
-    }
-    setStats((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        [key]: value,
-      },
-    }));
-  };
 
   const setImageURL = () => {
     const { value } = document.getElementById("imageURL") as HTMLInputElement
@@ -98,13 +44,9 @@ export default function App() {
     }))
   }
 
-
-
   return (
     <div className={darkMode ? "app dark" : "app light"}>
-      <Toolbar
-      stats={stats} setStats={setStats}
-      />
+      <Toolbar />
 
       {/* Scrollable main content */}
       <main className="main-content">
@@ -149,14 +91,14 @@ export default function App() {
             </div>
             <div className="middle-top">
               <div className="mints-spacer"></div>
-              <SecondaryStatTable stats={stats}/>
+              <SecondaryStatTable/>
               <br />
-              <BasicStatTable stats={stats} setStats={handleStatChange}/>
+              <BasicStatTable/>
             </div>
 
             {/* Row 2 (skills table spans 2 columns) */}
             <div className="skill-table-holder">
-              <SkillsTable stats={stats} setStats={handleStatChange}/>
+              <SkillsTable/>
             </div>
             
           </div>
@@ -165,9 +107,7 @@ export default function App() {
           <div className="right-column">
             <div className="mints-spacer" />
             <div className="name-row">
-              <AbilityButton 
-                stats={stats}
-              />
+              <AbilityButton/>
               <button 
                 className="ability-button" 
                 disabled
