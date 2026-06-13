@@ -175,7 +175,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Reckless",
             cost: 10,
-            description: "You may choose to use the Reckless ability before making any moves for your turn. When Reckless is active, you receive advantage on all melee attack checks this turn, but in return all attack rolls against you also have advantage until the start of your next turn.",
+            description: "You may choose to use the Reckless ability before making any moves for your turn. When Reckless is active, you receive advantage on all melee and ranged attack checks this turn, but in return all attack rolls against you also have advantage until the start of your next turn.",
         },
         {
             name: "Sneak Attack",
@@ -496,19 +496,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
             ]
         },
-        {
-            name: "Weapon Focus",
-            cost: 10,
-            description: "Choose a damage type you have affinity with. When performing attacks with this damage type, you get +2 to the attack test.",
-            stackable: true,
-            enhancementMode: "any",
-            enhancements: [
-                {
-                    cost: 10,
-                    description: "Choose a damage type you have Weapon Focus with. You cause +2 damage with attacks of this type."
-                },
-            ]
-        },
     ],
     magic: [
         {
@@ -799,20 +786,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
-            name: "Possession",
-            cost: 20,
-            degree: "amazing",
-            description: "By touching an unconscious target, you can enter their body if you beat a Will check (DC target's endurance). You assume the target's body, meaning you can use all their physical stats and abilities. Using this ability consumes a whole turn, and yeilds FP in an amount equal to the target's highest stat. The target can keep performing endurance tests to expel you.",
-            enhancementMode: "stacking",
-            enhancements: [
-                {
-                    cost: 20,
-                    degree: "epic",
-                    description: "You can possess conscious targets. You must successfully grapple the target. The target gains advantage on endurance when trying to expel you. All other aspects stay the same."
-                }
-            ]
-        },
-        {
             name: "Disease Resistance",
             cost: 10,
             description: "You receive advantage on Endurance tests to resist diseases and to recover from them.",
@@ -1077,20 +1050,17 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         // These abilties modify the Secondary Stat output
         {
             name: "Extra Fatigue Limit",
-            cost: 5,
-            stackable: true,
+            cost: 10,
             description: "Your VIG is considered one point higher when calculating your FL",
         },
         {
             name: "Extra Health Points",
-            cost: 5,
-            stackable: true,
+            cost: 10,
             description: "Your VIG is considered one point higher when calculating your HP",
         },
         {
             name: "Extra Magic Limit",
-            cost: 5,
-            stackable: true,
+            cost: 10,
             description: "Your INS is considered one point higher when calculating your AL",
         },
 
@@ -1561,12 +1531,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Weak Point",
             cost: -10,
             description: "You have a weak point that can be discovered with a test of Perception against your Deceive test. Anyone who knows your weak point can make use of it to gain advantage on every attack and dodge test against you.",
-        },
-        {
-            name: "Damage Inability",
-            cost: -10,
-            stackable: true,
-            description: "You lose a damage affinity you have.",
         },
         {
             name: "Moral Code",

@@ -18,6 +18,7 @@
 * [ ] Psyquemantia(20)
 * [ ] Spell Adeptness(5)
 * [brf] Taktikosmantia(10)
+* [ ] Reckless Casting (10)
 
 **Personal**
 
