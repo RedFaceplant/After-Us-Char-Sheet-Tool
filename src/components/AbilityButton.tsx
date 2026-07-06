@@ -8,12 +8,14 @@ import {type Categories, type RenderedAbility, abilities, type Ability, type Abi
 import { randomString, formatPrereqs, degreeRequirementMet, capitalFirst, booleansRequirePrevious, sizeOrder } from "../lib/util";
 import { formatAbilityEnhancement } from "../lib/reactUtil";
 import AbilityGenericDropdown from "./AbilityGenericDropdown";
+import type { Degrees } from "../app/types";
 
 export default function AbilityButton(){
     const dispatch = useDispatch()
 
     const [showAbilitySelect, setShowAbilitySelect] = useState(false); // The actual pop up menu showing
     const [selectedGroup, setSelectedGroup] = useState<Categories>("combat" as const) // The selected catergory
+    const [selectedDegreeFilter, setSelectedDegreeFilter] = useState<Degrees>("divine" as const) // The selected degree filter
     const [options, setOptions] = useState<string[]>([]); // All abilities in the selected catergory
     const [selectedAbility, setSelectedAbility] = useState<string>("") // Currently selected ability
     const [showPrereqWarning, setShowPrereqWarning] = useState(false); // Controls the pop up warning that the ability couldn't be added
@@ -32,12 +34,16 @@ export default function AbilityButton(){
       (state: RootState) => state.stats
     )
 
+    const filterByDegree = (abilityDegree: Degrees = "normal", selectedDegree: Degrees) => {
+        return degreeRequirementMet(selectedDegree, abilityDegree)
+    }
+
     // Update the abilities dropdown whenever the group dropdown changes
     useEffect(() => {
-        const abilityNames = abilities[selectedGroup].map((ability) => ability.name);
+        const abilityNames = abilities[selectedGroup].filter((ability) => (filterByDegree(ability.degree, selectedDegreeFilter))).map((ability) => ability.name)
         setOptions(abilityNames);
         setAbilityDropdownSelection("null")
-    }, [selectedGroup]);
+    }, [selectedGroup, selectedDegreeFilter]);
 
     // Get the full ability out of the list
     const getCurrentAbility = () => {
@@ -175,7 +181,7 @@ export default function AbilityButton(){
             <div>
                 <hr />
                 <form>
-                    {enhancements.map((enhancement, index) => (
+                    {enhancements.filter(enhancement => filterByDegree(enhancement.degree, selectedDegreeFilter)).map((enhancement, index) => (
                     <>
                         <input type="checkbox" id={`${selectedAbility}-${index}`} key={`${selectedAbility}-${index}`} />
                         <label htmlFor={`${selectedAbility}-${index}`}>
@@ -210,7 +216,7 @@ export default function AbilityButton(){
                 {enhancements ? abilityEnhancementOptions(enhancements, enhancementMode) : <></>}
             </div>
         )
-        }, [selectedAbility, abilityDropdownSelection])
+        }, [selectedAbility, abilityDropdownSelection, selectedDegreeFilter])
     }
 
     return (
@@ -226,6 +232,18 @@ export default function AbilityButton(){
             setShowAbilitySelect(false)
         }}>
             <label className="ability-label">
+                Degree Filter:
+                <select
+                value={selectedDegreeFilter}
+                onChange={e => setSelectedDegreeFilter(e.target.value as Degrees)}
+                >
+                    <option value="normal">Normal Only</option>
+                    <option value="amazing">Amazing or Normal</option>
+                    <option value="epic">Epic or less</option>
+                    <option value="divine">Any</option>
+                </select>
+            </label>
+            <label className="ability-label">
                 Show Catergory:
                 <select
                 value={selectedGroup}
@@ -238,7 +256,6 @@ export default function AbilityButton(){
                     <option value="flaws">Flaws</option>
                 </select>
             </label>
-            <br />
             <label className="ability-label">
                 Select Ability:
                 <select
@@ -253,6 +270,7 @@ export default function AbilityButton(){
                 ))}
                 </select>
             </label>
+            <br />
             <hr />
             {abilityBreakdown()}
         </ConfirmDialog>

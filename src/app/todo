@@ -3,15 +3,15 @@ Needs:
 * Ability and Flaw exclusive dropdown selection fix
 * Model text field with XP constant
 * Convert All Dropdowns into For Loops
-* Degree Filter on Ability List
 * ALL abilities and flaws
 * Better comments and typing in a few spots
-* Ability selection should clear when "new sheet" is selected
+* Ability selections should clear when "new sheet" is selected
 * Spells on enhancements
 * Ability red flag system
 * Dropdowns on enhancements
 * Dropdown null on first selection
 * Skill Inability / Adeptness flag on skills
+* Checkbox on degree filter for literal search or "less than" search
 
 Wants:
 * Ability Search

@@ -1,6 +1,5 @@
 **Combat**
 
-* [e] Acuity with Weapon(10)
 * [?] Defensive Stance(10)
 * [brf] Die Hard(20)
 * [e brf] Dual Wield(20)

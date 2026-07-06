@@ -26,7 +26,7 @@ export const DROPDOWNS = {
         "posion",
         "slash",
         "smash",
-        "sonic",
+        "magic",
     ],
     damageType: [
         "biologic",
@@ -38,8 +38,8 @@ export const DROPDOWNS = {
         "posion",
         "slash",
         "smash",
-        "sonic",
-        "aetherburn",
+        "magic",
+        "Aetherium",
         "psychic",
     ],
     maneuver: ["break", "disarm", "knock down", "push", "trample"],
@@ -149,21 +149,42 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         },
         {
             name: "Acuity with Weapon",
-            // Todo: Add Enhancements
             cost: 10,
-            description: "When attacking with light melee weapons, you can use your AGI instead of STR to calculate your Brawl skill and the damage of the attacks.",
+            description: "When attacking with weightless melee weapons, you can use your AGL instead of STR to calculate your Brawl skill and the damage of the attacks.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 20,
+                    description: "Also affects Light weapons."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "Also affects Medium weapons."
+                },
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "Also affects Heavy weapons."
+                },
+                {
+                    cost: 20,
+                    degree: "divine",
+                    description: "Affects any melee weapons you wield."
+                }
+            ]
         },
         {
             name: "Charged Attack",
             cost: 10,
             stackable: true,
             dropdownMode: "attackType",
-            description: "Takes a complete action and 1 FP. Your next attack does +100% damage if it lands. This ability can't be combined with any ability that allows multiple attacks",
+            description: "Takes a complete action and 1 FP to charge, where you are considered off-gaurd. Your next attack does +100% damage if it lands. This ability can't be combined with any ability that allows multiple attacks. Taking damage while charging requires a Will test with a DC equal to the damage received, on a failure you lose the charge effects.",
         },
         {
             name: "Combat Reflexes",
             cost: 10,
-            description: "When an opponent in melee range is off-gaurd, you can do any melee attack as a reaction.",
+            description: "When an opponent in melee range is off-gaurd, you can do a basic melee attack as a reaction at the cost of 1 FP.",
         },
         {
             name: "Improved Maneuver",
@@ -185,7 +206,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     stealth: 2,
                 }
             },
-            description: "Once per turn, when attacking one creature with advantage from a stealth check, you may add an extra 1d6 damage. The attack must use a finesse or ranged weapon.",
+            description: "Once per turn, when attacking one creature with advantage from a stealth check, you may add an extra 1d6 damage. The attack must use a finesse or ranged weapon. You don't need advantage if the target has another enemy within 5 feet that isn't incapacitated.",
         },
         {
             name: "Vital Energy",
@@ -262,7 +283,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         },
         {
             name: "Extra Energy",
-            cost: 10,
+            cost: 20,
             description: "With a standard action, you can recover an amount of HP equal to two times your VIG. You can only use this ability when your HP is critical. Using this ability yields 2 FP. this ability does not benefit from the ability Vital Energy.",
             enhancementMode: "any",
             enhancements: [
@@ -276,7 +297,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Harming Touch",
             cost: 10,
-            description: "Choose a damage type you have affinity with. Using a major action, you can unleash an attack against all the characters in your melee range. Using this ability yields 1 FP. This ability doesn't differentiate friends or foes. You can acquire this ability once for each damage type.",
+            description: "Choose a damage type you have affinity with. Using a major action, you can unleash an attack against all the characters in your melee range. Using this ability yields 1 FP. Every target must roll an Acrobatics test against your Brawl check. Characters that fail against your roll suffer 2d6+VIG damage of the chosen type. This ability doesn't differentiate friends or foes. You can acquire this ability once for each damage type.",
             stackable: true,
             dropdownMode: "currentDamageAffinities",
             enhancementMode: "any",
@@ -311,7 +332,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 10,
-                    description: "Increase the damage type of this natural ranged weapon by 1d6."
+                    description: "Increase the damage of this natural ranged weapon by 1d6."
                 },
                 {
                     cost: 20,
@@ -367,25 +388,25 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 {
                     cost: 10,
                     degree: "amazing",
-                    description: "You can choose to receive major disadvantage on the attack test to receive +3d to the damage."
+                    description: "You can choose to receive major disadvantage on the attack test to receive +3d6 to the damage."
                 },
                 {
                     cost: 10,
                     degree: "epic",
-                    description: "You can choose to receive total disadvantage on the attack test to receive +5d to the damage."
+                    description: "You can choose to receive total disadvantage on the attack test to receive +5d6 to the damage."
                 }
             ]
         },
         {
             name: "Leverage",
             cost: 20,
-            description: "When using any melee weapon besides light ones with both hands, you add two times your STR to the damage. If you are benefiting from Acuity with Weapon, this ability has no effects.",
+            description: "When using any melee weapon besides weightless ones with both hands, you add two times your STR to the damage. If you are benefiting from Acuity with Weapon, this ability has no effects.",
             enhancementMode: "any",
             enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "When benefiting from Acuity with Weapon, you sum both your STR and AGI to the damage (one time each)"
+                    description: "When benefiting from Acuity with Weapon, you sum both your STR and AGL to the damage (one time each)"
                 }
             ]
         },
@@ -403,7 +424,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "When sucessfuly deflecting an attack you can choose to redirect the attack to a new target with an Aim check. Adds +1 FP"
+                    description: "When sucessfuly deflecting an attack you can choose to use +1 FP to redirect the attack to a new target with an Aim check."
                 }
             ]
         },
@@ -420,7 +441,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 20,
-                    description: "When sucessfuly deflecting an attack you can preform a basic melee attack as a counter-attack. Adds 1FP in addition to the parry."
+                    description: "When sucessfuly parrying an attack you can preform a basic melee attack as a counter-attack. Adds 1FP in addition to the parry."
                 },
                 {
                     cost: 20,
@@ -460,7 +481,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             stackable: true,
             dropdownMode: "attackType",
-            description: "Each turn you can peform a number of additional attacks equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
+            description: "When using a major action to attack, you can peform a number of additional attacks of the same type (melee or range) equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -483,7 +504,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 10,
-                    description: "You can increase the DC of the stun test by 1 for every extra 1 FP you choose to add. This can't be used with the Paralize enhancement"
+                    description: "You can increase the DC of the stun test by 2 for every extra 1 FP you choose to add. This can't be used with the Paralize enhancement"
                 },
                 {
                     cost: 20,
@@ -499,6 +520,38 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
     ],
     magic: [
         {
+            name: "Known Spell",
+            cost: 3,
+            prereq: {
+                base: {
+                    reason: 3
+                }
+            },
+            description: "You can learn a Trivial spell. learning a spell doesn't make you able to cast it. To be able to cast a spell, you need the Mantia ability and any other requirement from the spell.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 7,
+                    description: "You learn a Normal spell"
+                },
+                {
+                    cost: 12,
+                    degree: "amazing",
+                    description: "You learn an Amazing spell"
+                },
+                {
+                    cost: 17,
+                    degree: "epic",
+                    description: "You learn an Epic spell"
+                },
+                {
+                    cost: 22,
+                    degree: "divine",
+                    description: "You learn a Divine spell"
+                },
+            ]
+        },
+        {
             name: "Mantia",
             cost: 10,
             prereq: {
@@ -507,8 +560,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     reason: 3
                 }
             },
-            description: "You are able to cast compositions. You also learn the basic compositions Heal, Move, Strke, and Cover",
-            spells: ["heal", "move", "strike", "cover"]
+            description: "You are able to cast spells. You also learn the basic spells Heal, Strke, and Cover",
+            spells: ["heal", "strike", "cover"]
         },
         {
             name: "Aethermantia",
@@ -522,8 +575,25 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls the flow and movement of aether itself. You learn the compositions Purify, Check, Empower, and Assist",
+            description: "Magic that controls the flow and movement of aether itself. You learn the spells Purify, Check, Empower, and Assist",
             spells: ["purify", "check", "empower", "assist"]
+        },
+        {
+            name: "Filasomantia",
+            cost: 20,
+            prereq: {
+                abilities: ["Mantia"]
+            },
+            description: "Magic focused on defense and reflections. You learn the spells Shield, Reinforce, and Wall",
+            spells: ["shield", "reinforce", "wall"],
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can cast these spells to the Amazing degree"
+                }
+            ]
         },
         {
             name: "Iasimantia",
@@ -534,7 +604,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic focused on healing and restoration. You learn the compositions Aid, Cure, and Restore",
+            description: "Magic focused on healing and restoration. You learn the spells Aid, Cure, and Restore",
             spells: ["aid", "cure", "restore"]
         },
         {
@@ -548,25 +618,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Iasimantia"]
             },
-            description: "Advanced magic that controls biological energy. You learn the compositions Regenerate and Weaken",
+            description: "Advanced magic that controls biological energy. You learn the spells Regenerate and Weaken",
             spells: ["regenerate", "weaken"]
-        },
-        {
-            name: "Filasomantia",
-            cost: 20,
-            prereq: {
-                abilities: ["Mantia"]
-            },
-            description: "Magic focused on defense and reflections. You learn the compositions Shield, Reinforce, and Wall",
-            spells: ["shield", "reinforce", "wall"],
-            enhancementMode: "any",
-            enhancements: [
-                {
-                    cost: 20,
-                    degree: "amazing",
-                    description: "You can cast these compositions to the Amazing degree"
-                }
-            ]
         },
         {
             name: "Polemosmantia",
@@ -574,14 +627,14 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             prereq: {
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls how to shape energy. You learn the compositions Ball of Energy, Burst, Damage, Fan, and Line",
+            description: "Magic that controls how to shape energy. You learn the spells Ball of Energy, Burst, Damage, Fan, and Line",
             spells: ["ball of energy", "burst", "damage", "fan", "line"],
             enhancementMode: "any",
             enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "You can cast these compositions to the Amazing degree"
+                    description: "You can cast these spells to the Amazing degree"
                 }
             ]
         },
@@ -591,7 +644,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             prereq: {
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls movement and force. You learn the compositions Force, Lift, Control, and Speed",
+            description: "Magic that controls movement and force. You learn the spells Force, Lift, Control, and Speed",
             spells: ["force", "lift", "control", "speed"]
         },
         {
@@ -603,7 +656,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls heat and fire. You learn the compositions Wick, Ball of Fire, and Burst (fire)",
+            description: "Magic that controls heat and fire. You learn the spells Wick, Ball of Fire, and Burst (fire)",
             spells: ["wick", "ball of energy", "burst"]
         },
         {
@@ -615,7 +668,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls cold, ice, and snow. You learn the compositions Cool, Ball of Frost, and Fan (cold)",
+            description: "Magic that controls cold, ice, and snow. You learn the spells Cool, Ball of Frost, and Fan (cold)",
             spells: ["cool", "ball of energy", "fan"]
         },
         {
@@ -627,7 +680,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls chemicals like acids. You learn the compositions Ball of Acid, and Fan (acid)",
+            description: "Magic that controls chemicals like acids. You learn the spells Ball of Acid, and Fan (acid)",
             spells: ["ball of energy", "fan"]
         },
         {
@@ -639,7 +692,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls electricity and lightning. You learn the compositions Empower (electric), Ball of Lightning, and Line (electric)",
+            description: "Magic that controls electricity and lightning. You learn the spells Empower (electric), Ball of Lightning, and Line (electric)",
             spells: ["empower", "ball of energy", "line"]
         },
         {
@@ -651,11 +704,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls air and wind. You learn the compositions Gust, Push-back and Lift (air)",
+            description: "Magic that controls air and wind. You learn the spells Gust, Push-back and Lift (air)",
             spells: ["gust", "push", "lift"]
         },
         {
-            name: "Illumantia",
+            name: "Lumenmantia",
             cost: 20,
             prereq: {
                 skill: {
@@ -663,7 +716,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that allows the emission of light. You learn the compositions Illuminate and Flash",
+            description: "Magic that allows the emission of light. You learn the spells Illuminate and Flash",
             spells: ["illuminate", "flash"]
         },
         {
@@ -676,24 +729,24 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that taps into the energy of nature. You learn the compositions Wild Shape and Summon Creature",
+            description: "Magic that taps into the energy of nature. You learn the spells Wild Shape and Summon Creature",
             spells: ["wild shape", "summon creature"],
             enhancementMode: "stacking",
             enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "You can cast these compositions to the Amazing degree"
+                    description: "You can cast these spells to the Amazing degree"
                 },
                 {
                     cost: 15,
                     degree: "epic",
-                    description: "You can cast these compositions to the Epic degree"
+                    description: "You can cast these spells to the Epic degree"
                 },
                 {
                     cost: 15,
                     degree: "divine",
-                    description: "You can cast these compositions to the Divine degree"
+                    description: "You can cast these spells to the Divine degree"
                 }
             ]
         },
@@ -728,14 +781,14 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that deals with telepathy. You learn the compositions Read Thoughts and Detect Thoughts",
+            description: "Magic that deals with telepathy. You learn the spells Read Thoughts and Detect Thoughts",
             spells: ["read thoughts", "detect thoughts"],
             enhancementMode: "any",
             enhancements: [
                 {
                     cost: 10,
                     degree: "amazing",
-                    description: "You can cast these compositions to the Amazing degree"
+                    description: "You can cast these spells to the Amazing degree"
                 }
             ]
         },
@@ -767,7 +820,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Shaman",
             cost: 10,
             degree: "amazing",
-            description: "You can interact with incorporeal beings as if they were corporeal.",
+            description: "You can see and interact with incorporeal beings as if they were corporeal.",
         },
         {
             name: "Command",
@@ -868,7 +921,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Flight",
             cost: 10,
             degree: "amazing",
-            description: "You gain a new way of movement by flight. Your movement value of flight is equal to your Athletics value. Flying yields 1 FP per round. You need freedom of movement to fly.",
+            description: "You gain a new way of movement by flight. Your movement value of flight is equal to your Athletics value. Flying yields 1 FP per round. You need freedom of movement to fly. To hover in the air, you must still use a movement action. If you are defeated or unconscious, you fall.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -924,7 +977,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Harmless Appearance",
             cost: 10,
             description: "Against targets that don't know you, you receive advantage on tests of Deceive and Initiative. This doesn't affect characters with the flaw Simple Mind.",
-            stackable: true,
             enhancementMode: "any",
             enhancements: [
                 {
@@ -949,11 +1001,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 {
                     cost: 10,
-                    description: "When increasing your INS, your HP will increase as well."
+                    description: "When increasing your VIG, your FL will increase as well."
                 },
                 {
                     cost: 10,
-                    description: "When increasing your INS, your HP will increase as well."
+                    description: "When increasing your INS, your AL will increase as well."
                 },
                 {
                     cost: 20,
@@ -1051,17 +1103,17 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Extra Fatigue Limit",
             cost: 10,
-            description: "Your VIG is considered one point higher when calculating your FL",
+            description: "Your VIG is considered one point higher when calculating your FL.",
         },
         {
             name: "Extra Health Points",
             cost: 10,
-            description: "Your VIG is considered one point higher when calculating your HP",
+            description: "Your VIG is considered one point higher when calculating your HP.",
         },
         {
             name: "Extra Magic Limit",
             cost: 10,
-            description: "Your INS is considered one point higher when calculating your AL",
+            description: "Your INS is considered one point higher when calculating your AL.",
         },
 
     ],
@@ -1072,7 +1124,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             prereq: {
                 smallerThan: "big",
             },
-            description: "You can use your AGI instead of STR on your Athletics skill.",
+            description: "You can use your AGL instead of STR on your Athletics skill.",
         },
         {
             name: "Arena",

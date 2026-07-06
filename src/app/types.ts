@@ -16,7 +16,7 @@ export const defaultSettings: Settings = {
   darkMode: true,
   verboseAbilities: true,
   viewMode: false,
-  showAssociatedStat: false,
+  showAssociatedStat: true,
 }
 
 export type Degrees = "normal" | "amazing" | "epic" | "divine"
