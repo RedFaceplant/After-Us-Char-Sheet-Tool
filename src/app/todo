@@ -1,5 +1,6 @@
 
 Needs:
+* FIX: Enhancements Explode when a filter is set
 * Ability and Flaw exclusive dropdown selection fix
 * Model text field with XP constant
 * Convert All Dropdowns into For Loops

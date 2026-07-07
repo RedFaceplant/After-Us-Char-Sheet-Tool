@@ -137,7 +137,7 @@ export default function AbilityButton(){
         
         // Get enhancement button status and check enhancements for degree requirements
         if(fullAbility.enhancements){
-            fullAbility.enhancements.map((enhancement, index) => {
+            fullAbility.enhancements.filter(enhancement => filterByDegree(enhancement.degree, selectedDegreeFilter)).map((enhancement, index) => {
                 const checkbox = document.getElementById(`${selectedAbility}-${index}`) as HTMLInputElement
                 buttonStatus[index] = checkbox.checked
 

@@ -187,6 +187,81 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "When an opponent in melee range is off-gaurd, you can do a basic melee attack as a reaction at the cost of 1 FP.",
         },
         {
+            name: "Combat Veteran",
+            cost: 10,
+            description: "When performing an attack of the chosen category, you can receive a bonus of +2 for the attack test and damage in exchange for receiving 1 FP.",
+            stackable: true,
+            dropdownMode: "attackType",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "the bonus given by the ability changes to +5. Yields 3 FP."
+                },
+                {
+                    cost: 30,
+                    degree: "epic",
+                    description: "the bonus given by the ability changes to +10. Yields 6 FP. Requires previous." // Not enforced, but present for users
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "the attack is dangerous, giving advantage during the attack test. Yields +2 FP."
+                }
+            ]
+        },
+        {
+            name: "Dual Wield",
+            cost: 20,
+            prereq: {
+                base: {
+                    agility: 6,
+                }
+            },
+            description: "You cause use one weapon in each hand as long as they are both weightless weapons. When attacking with a major action, you can attack with each weapon, but all attacks performed this way have disadvantage. This ability can never benefit from teh ability Leverage",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You can use this ability with light weapons."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can use this ability with medium weapons. Requires Previous." // This doesn't actually enforce the req previous rule since the final enchancement doesn't need this one. 
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You don't have disadvantage when using this ability."
+                }
+            ]
+        },
+        {
+            name: "Heavy Hands",
+            cost: 10,
+            description: "Increase your unarmed damage by 1d6, making it the same daamge as a light weapon.",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "Increase your unarmed damage by 1d6 again, making it cause the same damage as a medium weapon."
+                },
+                {
+                    cost: 30,
+                    degree: "epic",
+                    description: "Increase your unarmed damage by 1d6 again, making it cause the same damage as a heavy weapon."
+                },
+                {
+                    cost: 40,
+                    degree: "divine",
+                    description: "Increase your unarmed damage by 1d6 again, making it cause the same damage as an extreme weapon."
+                }
+            ]
+        },
+        {
             name: "Improved Maneuver",
             cost: 5,
             stackable: true,
@@ -519,38 +594,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         },
     ],
     magic: [
-        {
-            name: "Known Spell",
-            cost: 3,
-            prereq: {
-                base: {
-                    reason: 3
-                }
-            },
-            description: "You can learn a Trivial spell. learning a spell doesn't make you able to cast it. To be able to cast a spell, you need the Mantia ability and any other requirement from the spell.",
-            enhancementMode: "any",
-            enhancements: [
-                {
-                    cost: 7,
-                    description: "You learn a Normal spell"
-                },
-                {
-                    cost: 12,
-                    degree: "amazing",
-                    description: "You learn an Amazing spell"
-                },
-                {
-                    cost: 17,
-                    degree: "epic",
-                    description: "You learn an Epic spell"
-                },
-                {
-                    cost: 22,
-                    degree: "divine",
-                    description: "You learn a Divine spell"
-                },
-            ]
-        },
+        // Spell Groups:
         {
             name: "Mantia",
             cost: 10,
@@ -560,7 +604,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     reason: 3
                 }
             },
-            description: "You are able to cast spells. You also learn the basic spells Heal, Strke, and Cover",
+            description: "You are able to cast spells. You also learn the basic spells Heal, Strike, and Cover",
             spells: ["heal", "strike", "cover"]
         },
         {
@@ -575,7 +619,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls the flow and movement of aether itself. You learn the spells Purify, Check, Empower, and Assist",
+            description: "Aether magic. You learn the spells Purify, Check, Empower, and Assist",
             spells: ["purify", "check", "empower", "assist"]
         },
         {
@@ -584,7 +628,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             prereq: {
                 abilities: ["Mantia"]
             },
-            description: "Magic focused on defense and reflections. You learn the spells Shield, Reinforce, and Wall",
+            description: "Defensive Magic. You learn the spells Shield, Reinforce, and Wall",
             spells: ["shield", "reinforce", "wall"],
             enhancementMode: "any",
             enhancements: [
@@ -604,7 +648,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic focused on healing and restoration. You learn the spells Aid, Cure, and Restore",
+            description: "Basic healing magic. You learn the spells Aid, Cure, and Restore",
             spells: ["aid", "cure", "restore"]
         },
         {
@@ -618,7 +662,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Iasimantia"]
             },
-            description: "Advanced magic that controls biological energy. You learn the spells Regenerate and Weaken",
+            description: "Biological magic. You learn the spells Regenerate and Weaken",
             spells: ["regenerate", "weaken"]
         },
         {
@@ -627,7 +671,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             prereq: {
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls how to shape energy. You learn the spells Ball of Energy, Burst, Damage, Fan, and Line",
+            description: "Magic that shapes energy. You learn the spells Ball of Energy, Burst, Damage, Fan, and Line",
             spells: ["ball of energy", "burst", "damage", "fan", "line"],
             enhancementMode: "any",
             enhancements: [
@@ -644,7 +688,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             prereq: {
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls movement and force. You learn the spells Force, Lift, Control, and Speed",
+            description: "Force magic. You learn the spells Force, Lift, Control, and Speed",
             spells: ["force", "lift", "control", "speed"]
         },
         {
@@ -656,19 +700,19 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls heat and fire. You learn the spells Wick, Ball of Fire, and Burst (fire)",
+            description: "Fire magic. You learn the spells Wick, Ball of Fire, and Fireball. Magic attacks may use Fire damage.",
             spells: ["wick", "ball of energy", "burst"]
         },
         {
             name: "Cryomantia",
-            cost: 10,
+            cost: 15,
             prereq: {
                 skill: {
                     magic: 2
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls cold, ice, and snow. You learn the spells Cool, Ball of Frost, and Fan (cold)",
+            description: "Cold magic. You learn the spells Cool, Ball of Frost, and Ice Fan. Magic attacks may use Cold damage.",
             spells: ["cool", "ball of energy", "fan"]
         },
         {
@@ -680,7 +724,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls chemicals like acids. You learn the spells Ball of Acid, and Fan (acid)",
+            description: "Acid magic. You learn the spells Ball of Acid, and Acid Fan. Magic attacks may use Acid damage.",
             spells: ["ball of energy", "fan"]
         },
         {
@@ -692,8 +736,8 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls electricity and lightning. You learn the spells Empower (electric), Ball of Lightning, and Line (electric)",
-            spells: ["empower", "ball of energy", "line"]
+            description: "Electric magic. You learn the spells Shock, Ball of Lightning, and Bolt. Magic attacks may use Electric damage.",
+            spells: ["shock", "ball of energy", "bolt"]
         },
         {
             name: "Aeromantia",
@@ -704,7 +748,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that controls air and wind. You learn the spells Gust, Push-back and Lift (air)",
+            description: "Air magic. You learn the spells Gust, Push-back and Lift (air)",
             spells: ["gust", "push", "lift"]
         },
         {
@@ -716,7 +760,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that allows the emission of light. You learn the spells Illuminate and Flash",
+            description: "Light magic. You learn the spells Illuminate and Flash",
             spells: ["illuminate", "flash"]
         },
         {
@@ -729,7 +773,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that taps into the energy of nature. You learn the spells Wild Shape and Summon Creature",
+            description: "Nature magic. You learn the spells Wild Shape and Summon Creature",
             spells: ["wild shape", "summon creature"],
             enhancementMode: "stacking",
             enhancements: [
@@ -760,7 +804,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Advanced magic that allows combining lifeforms. You learn the composition Fusion",
+            description: "Fusion magic. You learn the composition Fusion",
             spells: ["fusion"],
             enhancementMode: "any",
             enhancements: [
@@ -781,7 +825,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 abilities: ["Mantia"]
             },
-            description: "Magic that deals with telepathy. You learn the spells Read Thoughts and Detect Thoughts",
+            description: "Thought magic. You learn the spells Read Thoughts and Detect Thoughts",
             spells: ["read thoughts", "detect thoughts"],
             enhancementMode: "any",
             enhancements: [
@@ -790,6 +834,39 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     degree: "amazing",
                     description: "You can cast these spells to the Amazing degree"
                 }
+            ]
+        },
+        // Other Magic Abiliites
+        {
+            name: "Known Spell",
+            cost: 3,
+            prereq: {
+                base: {
+                    reason: 3
+                }
+            },
+            description: "You can learn a Trivial spell. learning a spell doesn't make you able to cast it. To be able to cast a spell, you need the Mantia ability and any other requirement from the spell.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 7,
+                    description: "You learn a Normal spell"
+                },
+                {
+                    cost: 12,
+                    degree: "amazing",
+                    description: "You learn an Amazing spell"
+                },
+                {
+                    cost: 17,
+                    degree: "epic",
+                    description: "You learn an Epic spell"
+                },
+                {
+                    cost: 22,
+                    degree: "divine",
+                    description: "You learn a Divine spell"
+                },
             ]
         },
     ],
@@ -1169,7 +1246,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     insight: 5
                 }
             },
-            description: "Choose a performance art. You receive advantage on Acting tests involving it.",
+            description: "Using a complete action and a test of Insight DC 20, you can release 1d6 AP from your body. Doing this yields 2 FP.",
         },
         {
             name: "Skeptic",
@@ -1338,7 +1415,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             description: "Using a Major action, you can take items from other people without being noticed. Roll a test of Stealth (DC 20; light). If successful, you take an item that isn't equipped by the target. Items that are too big cause disadvantage. The target can perform a test of Perception with DC equal to the result of your Stealth test. If succeeded, the target notices something was stolen.",
-            enhancementMode: "any",
+            enhancementMode: "any", // This should not be left as Stacking, as these enhancements are not one long 'requires prev' chain.
             enhancements: [
                 {
                     cost: 10,
@@ -1367,7 +1444,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Identify Person",
             cost: 10,
-            description: "Using a Major action, you can use your ruse skill to get information on the stats, skills, abilities and flaws of a target. The DC is equal to 10 plus the target's power divided by 100. Each test gives one peice of information (stat values, skill group values, mental or physical abilites, ect. If the target has good or bad reputation, you get advantage.",
+            description: "Using a Minor action, you can use your ruse skill to get information on the stats, skills, abilities and flaws of a target. The DC is equal to 10 plus the target's power divided by 100. Each test gives one peice of information (stat values, skill group values, mental or physical abilites, ect.) If the target has good or bad reputation, you get advantage.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1471,7 +1548,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     mechanisms: 2
                 }
             },
-            description: "You gain advantage on Mechanisms tests of computation.",
+            description: "You gain advantage on Mechanisms tests of computation. Sabotaging an interaction tile on a large vehicle only takes a Minor action.",
         },
         {
             name: "Inner Peace",
