@@ -1,6 +1,5 @@
 
 Needs:
-* FIX: Enhancements Explode when a filter is set
 * Ability and Flaw exclusive dropdown selection fix
 * Model text field with XP constant
 * Convert All Dropdowns into For Loops
@@ -8,9 +7,8 @@ Needs:
 * Better comments and typing in a few spots
 * Ability selections should clear when "new sheet" is selected
 * Spells on enhancements
-* Ability red flag system
 * Dropdowns on enhancements
-* Dropdown null on first selection
+* Dropdown null on first selection bug
 * Skill Inability / Adeptness flag on skills
 * Checkbox on degree filter for literal search or "less than" search
 
@@ -25,5 +23,5 @@ Wishes:
 * HP FP AP tracker
 * Custom Attack builder
 * Weapon builder
-* Composition Lookup Tool
+* Spell Lookup Tool
 * Vehicle Builder

@@ -43,48 +43,16 @@
   - [ ] Add Amazing enhancement.
     - [ ] Rage only ends by unconsciousness or voluntarily ending it.
 
-- [ ] Alternate Form
-  - [ ] Expand description to mention changing forms leaves you off guard.
-  - [ ] Expand description to mention taking damage interrupts the transformation.
-  - [ ] Expand description to mention HP/FP/AP transfer rules when changing forms.
-
-- [ ] Attractive
-  - [ ] Add missing ability.
-  - [ ] Add `dropdownMode` (choose a base stat).
-  - [ ] Add enhancement chain.
-
-- [ ] Extra Attractive
-  - [ ] Add missing ability.
-  - [ ] Add prerequisite: Attractive.
-  - [ ] Add `dropdownMode` (choose one of your Attractive stats).
+    Enter as bonus action.
+    Advantage on STR/Brawl.
+    +2 weapon damage.
+    Resistance.
+    Cannot cast spells.
+    Rage ending condition.
 
 - [ ] Extra Limb
   - [ ] Add missing ability.
   - [ ] Set `stackable: true`.
-
-- [ ] Fusion
-  - [ ] Expand description to mention:
-    - Uses highest group bonuses and skill bonuses.
-    - Starts with full HP.
-    - FP/AP initialization rules.
-    - HP/AP split when fusion ends.
-    - Remaining FP becomes EFL.
-  - [ ] Expand Epic enhancement to mention:
-    - Target must resist with Endurance.
-    - Target may attempt to break free every round.
-  - [ ] Expand Special text to mention:
-    - Controller of the fusion.
-    - Size restrictions.
-    - Two-character limit.
-
-- [ ] Imitate
-  - [ ] Expand base description to mention:
-    - FP cost calculation.
-    - Gain traits of copied target.
-    - Cannot imitate size-related abilities.
-    - Special maximum copied abilities wording.
-  - [ ] Expand enhancement descriptions to include duration, FP rules, and action costs where appropriate.
-  - [ ] Add Special text indicating all imitations disappear when defeated or unconscious.
 
 - [ ] Invisibility
   - [ ] Expand description to mention:
@@ -96,13 +64,6 @@
   - [ ] Expand description to mention:
     - Will vs Endurance check.
     - Target can attempt to expel you every round.
-    - FP equals target's highest stat.
-    - Lasts one scene.
-
-- [ ] Skeptic
-  - [ ] Expand description to mention:
-    - [ ] Advantage disappears after succeeding.
-    - [ ] Effect is not cumulative.
 
 - [ ] Evasion
   - [ ] Add missing ability.
@@ -127,30 +88,9 @@
   - [ ] Description:
     - [ ] When at least 50 squares from allies, gain +2 on every test.
 
-- [ ] Skill Adeptness
-  - [ ] Add missing ability.
-  - [ ] Cost: 10.
-  - [ ] Set `stackable: true`.
-  - [ ] Add `dropdownMode` for skill selection.
-  - [ ] Add prerequisite:
-    - [ ] Selected skill bonus 2.
-  - [ ] Description:
-    - [ ] Spend 1 FP to gain advantage on the selected skill.
-  - [ ] Special:
-    - [ ] Once per skill (handled by dropdown + stackable behavior).
-
-- [ ] Bad Appearance
-  - [ ] Add `dropdownMode` for stat selection.
-    - [ ] The rulebook requires choosing a stat.
-  - [ ] Description is sufficient.
-
-- [ ] Bad Reputation
-  - [ ] Add `exclusive: "Good Reputation"`.
-
 - [ ] Channeling
   - [ ] Expand description to mention:
     - [ ] Losing or destroying the item causes Frightened for one scene.
-  - [ ] (Optional) Mention replacement item requires 3d6 days of adjustment.
 
 - [ ] Damage Weakness
   - [ ] Correct base description.
@@ -181,39 +121,16 @@
 - [ ] Skill Inability
   - [ ] Add `exclusive: "Skill Adeptness"`.
 
-- [ ] Strange Form
-  - [ ] Split implementation is intentional.
-  - [ ] Strange Form - Armor
-    - [ ] Add `exclusive: "Extra Limb"`.
-  - [ ] Strange Form - Vehicle
-    - [ ] Rename to **Strange Form - Mount** to match the rulebook terminology.
-      - [ ] (Optional if "Vehicle" is preferred terminology throughout the webapp.)
-  - [ ] Strange Form - Weapon
-    - [ ] No changes.
-
 - [ ] Damage Inability
   - [ ] Add `exclusive: "Damage Affinity"`.
   - [ ] Fix typo in description:
     - [ ] "affinitiy" → "affinity".
-
-- [ ] Known Spell
-  - [ ] Set `stackable: true`.
-    - [ ] This ability is intended to be purchased repeatedly.
-  - [ ] No other changes.
 
 - [ ] Aethermantia
   - [ ] Add Amazing enhancement.
     - [ ] Allows magic attacks to deal Aether damage.
 
 - [ ] Iasimantia
-  - [ ] Add Amazing enhancement.
-    - [ ] Cast granted spells at Amazing degree.
-
-- [ ] Biomantia
-  - [ ] Expand description (or add special text) to mention:
-    - [ ] Magic attacks may use Poison damage.
-
-- [ ] Kinesismantia
   - [ ] Add Amazing enhancement.
     - [ ] Cast granted spells at Amazing degree.
 
@@ -232,7 +149,7 @@
   - [ ] Add Epic enhancement.
     - [ ] Cast granted spells at Epic degree.
 
-- [ ] Taktikosmantia
+- [ ] Tactimantia
   - [ ] Add missing ability.
   - [ ] Cost: 10.
   - [ ] Prerequisites:
@@ -277,14 +194,6 @@
   - [ ] Add special text:
     - [ ] Magic attacks may use Water damage.
 
-- [ ] Magus
-  - [ ] Add missing ability.
-  - [ ] Cost: 10.
-  - [ ] Prerequisite:
-    - [ ] Mantia.
-    - [ ] Magic bonus 4.
-  - [ ] Add Amazing, Epic, and Divine enhancement chain.
-
 - [ ] Reckless Casting
   - [ ] Add missing ability.
   - [ ] Cost: 10.
@@ -313,8 +222,6 @@
 
 ## Missing abilities
 
-- [ ] Attractive
-- [ ] Extra Attractive
 - [ ] Extra Limb
 - [ ] Defensive Stance
 - [ ] Die Hard
@@ -325,12 +232,10 @@
 - [ ] Evasion
 - [ ] Masterpiece
 - [ ] Self Sufficient
-- [ ] Skill Adeptness
 - [ ] Psyquemantia
-- [ ] Taktikosmantia
+- [ ] Tactimantia
 - [ ] Illusimantia
 - [ ] Hydromantia
-- [ ] Magus
 - [ ] Reckless Casting
 - [ ] Spell Adeptness
 - [ ] Faulty Spirit
@@ -338,6 +243,6 @@
 - [ ] Reduced Mobility
 - [ ] Reduced Stamina
 
-## Death stare .mp3
+## Its complicated
 
 - [ ] Special Attack

@@ -1,4 +1,4 @@
-import { type SkillId, type BaseStatsId, type Degrees, type Sizes, skillGroupNames, skills } from "../app/types";
+import { type SkillId, type BaseStatsId, type Degrees, type Sizes, skillGroupNames, skills, baseStats } from "../app/types";
 
 export type Categories = "combat" | "magic" | "personal" | "skills" | "flaws"
 
@@ -45,10 +45,11 @@ export const DROPDOWNS = {
     maneuver: ["break", "disarm", "knock down", "push", "trample"],
     arena: ["water", "forest", "plains", "desert", "ice", "mountain", "sky", "city", "underground"],
     performanceArt: ["instrument", "acting", "singing"],
-    vehicle: ["light air", "heavy air", "light land", "heavy land", "light water", "heavy water"],
+    vehicle: ["air mount", "heavy air", "land mount", "heavy land", "water mount", "heavy water"],
     gathering: ["collecting", "extracting"],
     skillGroups: skillGroupNames,
     skills,
+    baseStats,
 }
 
 
@@ -623,7 +624,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             spells: ["purify", "check", "empower", "assist"]
         },
         {
-            name: "Filasomantia",
+            name: "Aegismantia",
             cost: 20,
             prereq: {
                 abilities: ["Mantia"]
@@ -640,7 +641,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
-            name: "Iasimantia",
+            name: "Vitamantia",
             cost: 20,
             prereq: {
                 skill: {
@@ -660,9 +661,9 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     magic: 5,
                     medicine: 4,
                 },
-                abilities: ["Iasimantia"]
+                abilities: ["Vitamantia"]
             },
-            description: "Biological magic. You learn the spells Regenerate and Weaken",
+            description: "Biological magic. You learn the spells Regenerate and Weaken. Magic attacks may use Poison damage.",
             spells: ["regenerate", "weaken"]
         },
         {
@@ -689,7 +690,15 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Force magic. You learn the spells Force, Lift, Control, and Speed",
-            spells: ["force", "lift", "control", "speed"]
+            spells: ["force", "lift", "control", "speed"],
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can cast these spells to the Amazing degree"
+                },
+            ]
         },
         {
             name: "Pyromantia",
@@ -846,6 +855,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             description: "You can learn a Trivial spell. learning a spell doesn't make you able to cast it. To be able to cast a spell, you need the Mantia ability and any other requirement from the spell.",
+            stackable: true,
             enhancementMode: "any",
             enhancements: [
                 {
@@ -869,6 +879,35 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
             ]
         },
+        {
+            name: "Magus",
+            cost: 10,
+            prereq: {
+                skill: {
+                    magic: 4
+                },
+                abilities: ["Mantia"]
+            },
+            description: "Reduce the DC by 5 for Normal and Trivial spells (to a minimum of 1)",
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 15,
+                    degree: "amazing",
+                    description: "Reduce the DC by 5 for Amazing spells, and further reduce the DC by 5 for Normal spells. You can no longer fail Trivial spells"
+                },
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "Reduce the DC by 5 for Epic spells, and further reduce the DC by 5 for Normal and Amazing spells."
+                },
+                {
+                    cost: 25,
+                    degree: "divine",
+                    description: "Reduce the DC by 5 for Divine spells, and further reduce the DC by 5 for Normal, Amazing and Epic spells. You can no longer fail Normal spells"
+                },
+            ]
+        },
     ],
     personal: [
         {
@@ -880,13 +919,31 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Alternate Form",
             cost: 20,
             stackable: true,
-            description: "You have another form! You are free to build this form as long as it has the same XP, REA, INS, reason and instinct related skills, and reason and instinct related abilities and flaws. Changing forms consume a whole round."
+            description: "You have another form! You are free to build this form as long as it has the same XP, REA, INS, reason and instinct related skills, and reason and instinct related abilities and flaws. Changing forms consume a whole round, leaving your off gaurd. If you take damage during the transformation, it is canceled."
+        },
+        {
+            name: "Attractive",
+            cost: 10,
+            stackable: true,
+            dropdownMode: "baseStats",
+            description: "Something about your appearance makes you attractive. Choose a stat to which your attrativeness will be connected to. You receive +2 to your Charisma tests relating to that stat.",
+            exclusive: "Bad Apperance"
+        },
+        {
+            name: "Extra Attractive",
+            cost: 10,
+            prereq: {
+                abilities: ["Attractive"]
+            },
+            dropdownMode: "baseStats",
+            description: "Choose a stat you have Attractive for. You receive +5 to your Charisma tests relating to that stat instead, and a +2 to all Charisma skills.",
         },
         {
             name: "Good Reputation",
             cost: 10,
             stackable: true,
             description: "You have a good reputation with a certain kind of people. When interacting with them, you receive advantage on your Charisma tests.",
+            exclusive: "Bad Reputation"
         },
         {
             name: "False Appearance",
@@ -971,7 +1028,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Imitate",
             cost: 20,
             degree: "amazing",
-            description: "You can imitate an ability from a target. If possible, the target must have used this ability before you can test for imitating it. To do so, you must use one combat turn and be well succeeded in a test of Perception with DC equal to the target's defense. If well succeeded, you copy the ability for a scene. You can imitate a maximum number of abilites equal to your original REA score.",
+            description: "You can imitate an ability from a target, except for size related abilities. If possible, the target must have used this ability before you can test for imitating it. To do so, you must use one combat turn and be well succeeded in a test of Perception with DC equal to the target's defense. If well succeeded, you copy the ability for a scene, accumulating the XP of the skill divided by 10 in XP. You can imitate a maximum number of abilites equal to your original REA score.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -995,6 +1052,19 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
+            name: "Extended Reach",
+            cost: 10,
+            description: "Your melee range is extended. All weapons (and unarmed) are treated as if they have another layer of Reach on them.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "Add one more layer of Reach"
+                }
+            ]
+        },
+        {
             name: "Flight",
             cost: 10,
             degree: "amazing",
@@ -1011,43 +1081,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     degree: "amazing",
                     description: "You don't need to spend a movement action to stay still on the air."
                 }
-            ]
-        },
-        {
-            name: "Extended Reach",
-            cost: 10,
-            description: "Your melee range is extended. All weapons (and unarmed) are treated as if they have another layer of Reach on them.",
-            enhancementMode: "any",
-            enhancements: [
-                {
-                    cost: 10,
-                    degree: "amazing",
-                    description: "Add one more layer of Reach"
-                }
-            ]
-        },
-        {
-            name: "Fusion",
-            cost: 30,
-            degree: "amazing",
-            description: "Using a complete action, you can fuse with a willing character. The fusion has the highest stats between characters that make up the fusion, as well as all abilities and flaws from both. The fusion lasts for the number of rounds equal to your VIG (before the fusion).",
-            enhancementMode: "any",
-            enhancements: [
-                {
-                    cost: 20,
-                    degree: "amazing",
-                    description: "The fusion will come with no FP or AP."
-                },
-                {
-                    cost: 20,
-                    degree: "amazing",
-                    description: "The fusion will last for the whole scene."
-                },
-                {
-                    cost: 20,
-                    degree: "epic",
-                    description: "You can fuse with an unwilling character if you are grappling them and beat them in an Endurance check."
-                },
             ]
         },
         {
@@ -1196,14 +1229,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
     ],
     skills: [
         {
-            name: "Nimble",
-            cost: 10,
-            prereq: {
-                smallerThan: "big",
-            },
-            description: "You can use your AGL instead of STR on your Athletics skill.",
-        },
-        {
             name: "Arena",
             cost: 20,
             prereq: {
@@ -1249,11 +1274,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "Using a complete action and a test of Insight DC 20, you can release 1d6 AP from your body. Doing this yields 2 FP.",
         },
         {
-            name: "Skeptic",
-            cost: 10,
-            description: "When you fail in a test of Discern against Deceive performed by another character, you receive advantage on the next test of the same type against this character.",
-        },
-        {
             name: "Diligent",
             cost: 20,
             description: "You can spend a major action studying a certain task. You receive a bonus of +2 on the test for this task as long as it's performed before the end of the next round.",
@@ -1267,6 +1287,26 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Face in the Crowd",
             cost: 10,
             description: "You receive advantage on tests of Stealth when in the middle of crowds.",
+        },
+        {
+            name: "Nimble",
+            cost: 10,
+            prereq: {
+                smallerThan: "big",
+            },
+            description: "You can use your AGL instead of STR on your Athletics skill.",
+        },
+        {
+            name: "Skeptic",
+            cost: 10,
+            description: "When you fail in a test of Discern against Deceive performed by another character, you receive advantage on the next test of the same type against this character.",
+        },
+        {
+            name: "Skill Adeptness",
+            cost: 10,
+            dropdownMode: "skills",
+            description: "Pre: 4 points in the selected skill. Whenever you preform a test with this skill, you can receive advantage for 1 FP.",
+            stackable: true,
         },
         {
             name: "Merchant",
@@ -1358,7 +1398,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             stackable: true,
             dropdownMode: "vehicle",
-            description: "You receive advantage on Mechanisms tests of drive and operate when using the selected vehicle type.",
+            description: "You receive advantage on Mechanisms tests of drive and operate when using the selected vehicle or mount type.",
         },
         {
             name: "Fearsome",
@@ -1589,6 +1629,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Bad Appearance",
             cost: -5,
             stackable: true,
+            dropdownMode: "baseStats",
             description: "Something about your appearance makes you less interesting to people. Choose a stat to which your bad appearance will be connected. You receive -2 to your Charisma tests relating to that stat.",
             exclusive: "Attractive"
         },
@@ -1597,6 +1638,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: -5,
             stackable: true,
             description: "You have a bad reputation with a certain kind of people. When interacting with them, you receive disadvantage on your Charisma tests.",
+            exclusive: "Good Reputation"
         },
         {
             name: "Blood Price",
@@ -1645,11 +1687,12 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Strange Form - Armor",
             cost: -10,
             description: "Your body shape isn't fit to the usual types of clothing and armors. You must pay twice the value for any armor or clothing you buy, and it'll only fit you. You cannot use armor or clothing that isn't made specially for you.",
+            exclusive: "Extra Limb"
         },
         {
-            name: "Strange Form - Vehicle",
+            name: "Strange Form - Mount",
             cost: -10,
-            description: "You don't fit in most vehicles, needing them specially prepared for you, meaning you pay twice the price for them.",
+            description: "You don't fit in or on most mounts, needing them specially prepared for you, meaning you pay twice the price for them.",
         },
         {
             name: "Strange Form - Weapon",
