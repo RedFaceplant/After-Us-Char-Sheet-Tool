@@ -112,7 +112,7 @@ export default function AbilityButton(){
             return
         }
 
-        if(fullAbility.dropdownMode != "none" && currentAbilities.find(obj => obj.name == selectedAbility && obj.dropdownSelection == abilityDropdownSelection)){
+        if(fullAbility.dropdownMode && fullAbility.dropdownMode != "none" && currentAbilities.find(obj => obj.name == selectedAbility && obj.dropdownSelection == abilityDropdownSelection)){
             setWarningMode("dropdownStacking")
             setShowPrereqWarning(true)
             return

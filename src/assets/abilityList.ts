@@ -220,7 +220,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     agility: 6,
                 }
             },
-            description: "You cause use one weapon in each hand as long as they are both weightless weapons. When attacking with a major action, you can attack with each weapon, but all attacks performed this way have disadvantage. This ability can never benefit from teh ability Leverage",
+            description: "You cause use one weapon in each hand as long as they are both weightless weapons. When attacking with a major action, you can attack with each weapon, but all attacks performed this way have disadvantage. This ability can never benefit from the ability Leverage",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -268,6 +268,37 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             stackable: true,
             dropdownMode: "maneuver",
             description: "Choose a maneuver type. You receive advantage when preforming or defending against the chosen maneuver. You can aquire this once for each maneuver",
+        },
+        {
+            name: "Rage",
+            cost: 10,
+            prereq: {
+                base: {
+                    strength: 3,
+                }
+            },
+            description: "On your turn as a bonus action, you can enter an enraged state. While enraged, you have advantage on checks and saving throws for STR and Brawl, have +2 damage when attacking with Brawl, and have resistance to Smash and Slash Damage. If you were to drop to 0HP while enraged, you can make an Endurance saving throw to drop to 1 HP instead. While enraged you can't cast spells or pass concentration checks. You must long rest before you can enter another rage state.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You can enter another rage state before a long rest, and get another +1 on the attack bonus."
+                },
+                {
+                    cost: 10,
+                    description: "For every STR point you have you can enter a rage state before needing to rest. Requires previous." // This doesn't actually enforce the req previous rule since the next enchancements don't need this one. 
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "For every short rest you perform, you get 1 rage state back." 
+                },
+                {
+                    cost: 15,
+                    degree: "amazing",
+                    description: "Your enraged state only ends if you are knocked unconscious or if you end it as a bonus action."
+                }
+            ]
         },
         {
             name: "Reckless",
@@ -621,7 +652,15 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Aether magic. You learn the spells Purify, Check, Empower, and Assist",
-            spells: ["purify", "check", "empower", "assist"]
+            spells: ["purify", "check", "empower", "assist"],
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can change the attack type of magic attacks to use Aether damage"
+                }
+            ]
         },
         {
             name: "Aegismantia",
@@ -650,7 +689,15 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Basic healing magic. You learn the spells Aid, Cure, and Restore",
-            spells: ["aid", "cure", "restore"]
+            spells: ["aid", "cure", "restore"],
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 15,
+                    degree: "amazing",
+                    description: "You can cast these spells to the Amazing degree"
+                }
+            ]
         },
         {
             name: "Biomantia",
@@ -771,6 +818,18 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "Light magic. You learn the spells Illuminate and Flash",
             spells: ["illuminate", "flash"]
+        },
+        {
+            name: "Hydromantia",
+            cost: 15,
+            prereq: {
+                skill: {
+                    magic: 2
+                },
+                abilities: ["Mantia"]
+            },
+            description: "Water magic. You learn the spells Ball of Water, Flood, Waterwalk, and Purify Water. Magic attacks may use Water damage.",
+            spells: ["ball of energy", "flood", "waterwalk", "purify water"]
         },
         {
             name: "Zoomantia",
@@ -908,6 +967,17 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
             ]
         },
+        {
+            name: "Reckless Casting",
+            cost: 10,
+            prereq: {
+                skill: {
+                    magic: 3
+                },
+                abilities: ["Mantia"]
+            },
+            description: "You must choose to use reckless casting before casting any spells on your turn. When reckless casting is used, you receive advantage on all magic checks related to casting spells for this turn. If the spell still fails you take 1d6 damage. The damage type is equal to the spell’s damage type, if any, and otherwise it is aether damage.  All attacks against you have advantage until the start of your next turn.",
+        },
     ],
     personal: [
         {
@@ -939,24 +1009,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "Choose a stat you have Attractive for. You receive +5 to your Charisma tests relating to that stat instead, and a +2 to all Charisma skills.",
         },
         {
-            name: "Good Reputation",
-            cost: 10,
-            stackable: true,
-            description: "You have a good reputation with a certain kind of people. When interacting with them, you receive advantage on your Charisma tests.",
-            exclusive: "Bad Reputation"
-        },
-        {
-            name: "False Appearance",
-            cost: 15,
-            description: "As a major action, you can transform yourself to camouflage with specific surroundings, such as a skeleton hiding as a pile of bones. This is ultimately up to the GM and the player. When in the false appearance state, you are considered prone and have a movement of 0, but are indistinguishable from your counterpart.",
-        },
-        {
-            name: "Shaman",
-            cost: 10,
-            degree: "amazing",
-            description: "You can see and interact with incorporeal beings as if they were corporeal.",
-        },
-        {
             name: "Command",
             cost: 10,
             description: "You can shout orders to your allies in the range of your voice. Doing this consumes a minor action, yields 1 FP, and gives a bonus of +2 to every ally on every test for the rest of the scene.",
@@ -971,6 +1023,36 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     description: "Change the bonus to +4."
                 }
             ]
+        },
+        {
+            name: "Extra Limb - STR",
+            cost: 10,
+            stackable: true,
+            description: "You have an extra appendage. This appendage gives +1 to your movement, tests of Althetics to run and jump and test of Brawl to resist and perform the maneuvers Push and Trample. Every character with at least one extra limb is treated as if they have the flaw Strange Form (Armor)"
+        },
+        {
+            name: "Extra Limb - AGL",
+            cost: 10,
+            stackable: true,
+            description: "You have an extra appendage. This appendage works the same as an arm, being able to hold objects and weapons, and make complex gestures. When using Dual Wield, you can peform an additional attack with every extra AGL limb. Every character with at least one extra limb is treated as if they have the flaw Strange Form (Armor)"
+        },
+        {
+            name: "False Appearance",
+            cost: 15,
+            description: "As a major action, you can transform yourself to camouflage with specific surroundings, such as a skeleton hiding as a pile of bones. This is ultimately up to the GM and the player. When in the false appearance state, you are considered prone and have a movement of 0, but are indistinguishable from your counterpart.",
+        },
+        {
+            name: "Good Reputation",
+            cost: 10,
+            stackable: true,
+            description: "You have a good reputation with a certain kind of people. When interacting with them, you receive advantage on your Charisma tests.",
+            exclusive: "Bad Reputation"
+        },
+        {
+            name: "Shaman",
+            cost: 10,
+            degree: "amazing",
+            description: "You can see and interact with incorporeal beings as if they were corporeal.",
         },
         {
             name: "Disease Resistance",
@@ -1128,7 +1210,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Invisibility",
             cost: 20,
             degree: "amazing",
-            description: "Using a minor action, you become invisible. Every character has major disavantage on attacks against you and you recieve major advantage on Stealth tests. Staying invisible yields 1 FP per round.",
+            description: "Using a minor action, you become invisible. Every character has major disavantage on attacks against you and you recieve major advantage on Stealth tests. Staying invisible yields 1 FP per round. Doing an aggresive action, taking damage, or becoming defeated or unconscious causes your invisibility to fade.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1152,7 +1234,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Possession",
             cost: 20,
             degree: "amazing",
-            description: "Using a major action you can enter the body of an unconscious or defeated target while grappling them. You can assume the target's body, gaining all physical stats and abilities from them.",
+            description: "Using a major action you can enter the body of an unconscious or defeated target while grappling them. You can assume the target's body, gaining all physical stats and abilities from them. You must be well succedded in a test of Will agaisnt the target's Endurance to successfully possess the target you are touching. The target can attempt to expel you every round by re-running this check, but you only have to succeed.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1284,6 +1366,23 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "You receive advantage on Discern tests of Sense Behavior.",
         },
         {
+            name: "Evasion",
+            cost: 10,
+            prereq: {
+                skill: {
+                    acrobatics: 2
+                }
+            },
+            description: "You don't receive FP upon being well succeeded on a dodge.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    description: "You don't receive FP for dodging."
+                }
+            ]
+        },
+        {
             name: "Face in the Crowd",
             cost: 10,
             description: "You receive advantage on tests of Stealth when in the middle of crowds.",
@@ -1307,6 +1406,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             dropdownMode: "skills",
             description: "Pre: 4 points in the selected skill. Whenever you preform a test with this skill, you can receive advantage for 1 FP.",
             stackable: true,
+            exclusive: "Skill Inability"
         },
         {
             name: "Merchant",
@@ -1649,7 +1749,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Channeling",
             cost: -10,
-            description: "You have a certain item that helps you focus on your tasks. Whenever you are without this item, you receive twice as much FP and AP for anything you do.",
+            description: "You have a certain item that helps you focus on your tasks. Whenever you are without this item, you receive twice as much FP and AP for anything you do. If the item is lost or broken, you become Frightened for the scene and need 3d6 days to get used to a new item.",
         },
         {
             name: "Devotion",
@@ -1724,7 +1824,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Damage Weakness",
             cost: -10,
-            description: "Choose a damage type. When hit by this damage type, you receive disadvantage.",
+            description: "Choose a damage type. When hit by this damage type, the attacker has advantage.",
             stackable: true,
             dropdownMode: "damageType",
             enhancementMode: "any",
@@ -1736,7 +1836,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Damage Inability",
             cost: -10,
-            description: "You are unable to have an affinitiy with a specific damage type.",
+            description: "You are unable to have an affinity with a specific damage type.",
             stackable: true,
             dropdownMode: "damageType",
         },
@@ -1746,6 +1846,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             description: "You have disadvantage on all tests of this skill.",
             stackable: true,
             dropdownMode: "skills",
+            exclusive: "Skill Adeptness"
         },
         // Mental Disability Section
         {
