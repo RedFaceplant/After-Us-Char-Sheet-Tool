@@ -1,22 +1,5 @@
 ## Todo
 
-- [ ] Defensive Stance
-  - [ ] Add missing ability.
-  - [ ] Add prerequisite: AGI 6.
-  - [ ] Add enhancement (+10 Amazing).
-    - [ ] Changes Total Defense bonus from +5 to +10.
-    - [ ] Enhancement requires AGI 11.
-
-- [ ] Die Hard
-  - [ ] Add missing ability.
-  - [ ] Add prerequisite: VIG 6.
-  - [ ] Add enhancement: continue acting after defeat until reaching FL.
-  - [ ] Add enhancement: advantage against death by shock.
-  - [ ] Add Amazing enhancement: major advantage against death by shock.
-    - [ ] Add prerequisite: VIG 11.
-  - [ ] Add Epic enhancement: total advantage against death by shock.
-    - [ ] Add prerequisite: VIG 16.
-
 - [ ] Masterpiece
   - [ ] Add missing ability.
   - [ ] Cost: 30.
@@ -24,31 +7,9 @@
   - [ ] Description:
     - [ ] Can create higher quality items and items with improvements.
 
-- [ ] Self Sufficient
-  - [ ] Add missing ability.
-  - [ ] Cost: 20.
-  - [ ] Prerequisite:
-    - [ ] Skill bonus 3 on at least five different skills.
-  - [ ] Description:
-    - [ ] When at least 50 squares from allies, gain +2 on every test.
-
-- [ ] Faulty Spirit.
-  - [ ] Add missing ability: Faulty Spirit.
-    - [ ] Cost: -15.
-    - [ ] Reduces AL and FL.
-
-- [ ] Physical Disability
-  - [ ] Split implementation is intentional.
-  - [ ] Add missing ability: Faulty Health.
+- [ ] Add missing ability: Faulty Health.
     - [ ] Cost: -20.
     - [ ] Reduces HP size multiplier.
-  - [ ] Add missing ability: Reduced Mobility.
-    - [ ] Cost: -10.
-    - [ ] Halves movement.
-  - [ ] Add missing ability: Reduced Stamina.
-    - [ ] Cost: -15.
-    - [ ] Reduces FL, MFL, and EFL.
-  - [ ] Existing Physical Disability abilities require no changes.
 
 - [ ] Psyquemantia
   - [ ] Add missing ability.
@@ -84,7 +45,7 @@
 
 - [ ] Illusimantia
   - [ ] Add missing ability.
-  - [ ] Cost: 15.
+  - [ ] Cost: 20.
   - [ ] Prerequisite:
     - [ ] Mantia.
   - [ ] Grants:
@@ -96,15 +57,15 @@
   - [ ] Add Epic enhancement.
     - [ ] Cast at Epic degree.
 
-- [ ] Spell Adeptness
+- [ ] Kaleomantia
   - [ ] Add missing ability.
-  - [ ] Cost: 5.
-  - [ ] Set `stackable: true`.
-  - [ ] Add `dropdownMode` for spell selection.
-  - [ ] Prerequisite:
-    - [ ] Mantia.
-  - [ ] Description:
-    - [ ] Reduce AP accumulation by 1 (minimum 1).
+  - [ ] Cost: 25
+  - [ ] Prerequisite: Mantia
+  - [ ] Grants the summoning spells
+  - [ ] Add Amazing enhancements
+  - [ ] Add Epic enhancements
+
+- [ ] Spell Adeptness
   - [ ] Add repeatable enhancement.
     - [ ] Additional AP reduction.
     - [ ] Cost increases by 5 each purchase.
@@ -112,19 +73,12 @@
 
 ## Missing abilities
 
-- [ ] Defensive Stance
-- [ ] Die Hard
 - [ ] Masterpiece
-- [ ] Self Sufficient
 - [ ] Psyquemantia
 - [ ] Tactimantia
 - [ ] Illusimantia
 - [ ] Kaleomantia
-- [ ] Spell Adeptness
-- [ ] Faulty Spirit
 - [ ] Faulty Health
-- [ ] Reduced Mobility
-- [ ] Reduced Stamina
 
 ## Its complicated
 

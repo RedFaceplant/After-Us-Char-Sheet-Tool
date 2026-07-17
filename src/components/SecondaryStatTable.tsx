@@ -44,7 +44,10 @@ const trackedAbilities = [
   "Extra Fatigue Limit",
   "Extra Health Points",
   "Extra Magic Limit",
-  "Extra Limb - STR"
+  "Extra Limb - STR",
+  "Reduced Mobility",
+  "Reduced Stamina",
+  "Faulty Spirit"
 ];
 
 export default function SecondaryStatTable(){
@@ -70,9 +73,9 @@ export default function SecondaryStatTable(){
     const secondaryStats = {
         xp,
         hp: (baseStats.vigor + 1 + abilityCounts["Extra Health Points"]) * sizeModifiers[size].hpMultiplier,
-        fl: 3 * (baseStats.vigor + abilityCounts["Extra Fatigue Limit"]),
-        al: 2 * (baseStats.instinct + abilityCounts["Extra Magic Limit"]),
-        mov: Math.ceil((stats.skills.athletics + stats.skillGroups.constitution + baseStats.strength) / 2.0) + sizeModifiers[size].movementModifier + abilityCounts["Extra Limb - STR"],
+        fl: (3 - abilityCounts["Reduced Stamina"]) * (baseStats.vigor + abilityCounts["Extra Fatigue Limit"]),
+        al: (2 - abilityCounts["Faulty Spirit"]) * (baseStats.instinct + abilityCounts["Extra Magic Limit"]),
+        mov: Math.ceil((Math.ceil((stats.skills.athletics + stats.skillGroups.constitution + baseStats.strength) / 2.0) + sizeModifiers[size].movementModifier + abilityCounts["Extra Limb - STR"]) * (1 - 0.5*abilityCounts["Reduced Mobility"]) ),
         dfn: 10 + baseStats.agility + sizeModifiers[size].defenceModifier,
         size: size,
         mod: modifier,

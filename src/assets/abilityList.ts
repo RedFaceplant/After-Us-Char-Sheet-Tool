@@ -213,6 +213,37 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             ]
         },
         {
+            name: "Die Hard",
+            cost: 20,
+            prereq: {
+                base: {
+                    vigor: 6,
+                }
+            },
+            description: "You receive advantage on tests of Endurance against death.",
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 20,
+                    description: "If you are defeated but haven't reached your FL, you can keep acting. Each round you stay up yields 1 FP."
+                },
+                {
+                    cost: 20,
+                    description: "You receive advantage on tests of Endurance against death by shock."
+                },
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "REQUIRES VIG 11+. You receive major advantage on tests of Endurance against death by shock."
+                },
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "REQUIRES VIG 16+. You receive total advantage on tests of Endurance against death by shock."
+                },
+            ]
+        },
+        {
             name: "Dual Wield",
             cost: 20,
             prereq: {
@@ -757,7 +788,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Fire magic. You learn the spells Wick, Ball of Fire, and Fireball. Magic attacks may use Fire damage.",
-            spells: ["wick", "ball of energy", "burst"]
+            spells: ["wick", "ball of fire", "fireball"]
         },
         {
             name: "Cryomantia",
@@ -769,7 +800,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Cold magic. You learn the spells Cool, Ball of Frost, and Ice Fan. Magic attacks may use Cold damage.",
-            spells: ["cool", "ball of energy", "fan"]
+            spells: ["cool", "ball of frost", "ice fan"]
         },
         {
             name: "Oxymantia",
@@ -781,7 +812,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Acid magic. You learn the spells Ball of Acid, and Acid Fan. Magic attacks may use Acid damage.",
-            spells: ["ball of energy", "fan"]
+            spells: ["ball of acid", "acid fan"]
         },
         {
             name: "Fulgurmantia",
@@ -793,7 +824,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Electric magic. You learn the spells Shock, Ball of Lightning, and Bolt. Magic attacks may use Electric damage.",
-            spells: ["shock", "ball of energy", "bolt"]
+            spells: ["shock", "ball of lightning", "bolt"]
         },
         {
             name: "Aeromantia",
@@ -805,7 +836,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 abilities: ["Mantia"]
             },
             description: "Air magic. You learn the spells Gust, Push-back and Lift (air)",
-            spells: ["gust", "push", "lift"]
+            spells: ["gust", "push-back", "lift"]
         },
         {
             name: "Lumenmantia",
@@ -978,6 +1009,13 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             description: "You must choose to use reckless casting before casting any spells on your turn. When reckless casting is used, you receive advantage on all magic checks related to casting spells for this turn. If the spell still fails you take 1d6 damage. The damage type is equal to the spell’s damage type, if any, and otherwise it is aether damage.  All attacks against you have advantage until the start of your next turn.",
         },
+        {
+            name: "Spell Adeptness",
+            cost: 10,
+            stackable: true,
+            description: "Choose a spell you know and can cast. You reduce the AP cost of casting it by 1 AP (min 1).",
+            dropdownMode: "currentSpells"
+        }
     ],
     personal: [
         {
@@ -1613,33 +1651,6 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
             ]
         },
-        // Special Movements
-        {
-            name: "Wall Crawl",
-            cost: 10,
-            description: "Different from the normal climb movement from the Athletics skill, you can move at your normal speed on vertical surfaces or even on the ceiling. You only make tests of Athletics to avoid falling from damage.",
-        },
-        {
-            name: "Dig",
-            cost: 10,
-            description: "you can move through soft soils with half of your normal movement. You can choose if you want to leave an open tunnel behind you or collapse it.",
-        },
-        {
-            name: "Adept Swimmer",
-            cost: 10,
-            description: "Water is no longer considered rough terrain, meaning you can use your full movement in water.",
-        },
-        {
-            name: "Water Walk",
-            cost: 10,
-            description: "you can walk over water and any other liquid material as if you were walking on solid ground. You can still dive into the liquid normally. This ability doesn't give any protection against the effects of the liquids you may walk over (eg. you will still burn if walking over lava).",
-        },
-        {
-            name: "Glide",
-            cost: 10,
-            description: "As long as you have freedom of movement, you can glide safely from any height. This grants advantage on tests of secure fall and immunity to fall damage when successfully gliding.",
-        },
-        // GPT Generated ones
         {
             name: "Eavesdropper",
             cost: 10,
@@ -1709,6 +1720,37 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             },
             description: "You can use Intimidate tests (persuade or threaten) to cause disadvantage on the next test of Deceive for your target. Using this ability yields 1 FP.",
+        },
+        {
+            name: "Self Sufficient",
+            cost: 20, // Come back with Custom Prereqs
+            description: "Requires a bonus of 3 on 5 different skills. When far from allied characters (250+ ft) you have +2 on every test.",
+        },
+        // Special Movements
+        {
+            name: "Wall Crawl",
+            cost: 10,
+            description: "Different from the normal climb movement from the Athletics skill, you can move at your normal speed on vertical surfaces or even on the ceiling. You only make tests of Athletics to avoid falling from damage.",
+        },
+        {
+            name: "Dig",
+            cost: 10,
+            description: "you can move through soft soils with half of your normal movement. You can choose if you want to leave an open tunnel behind you or collapse it.",
+        },
+        {
+            name: "Adept Swimmer",
+            cost: 10,
+            description: "Water is no longer considered rough terrain, meaning you can use your full movement in water.",
+        },
+        {
+            name: "Water Walk",
+            cost: 10,
+            description: "you can walk over water and any other liquid material as if you were walking on solid ground. You can still dive into the liquid normally. This ability doesn't give any protection against the effects of the liquids you may walk over (eg. you will still burn if walking over lava).",
+        },
+        {
+            name: "Glide",
+            cost: 10,
+            description: "As long as you have freedom of movement, you can glide safely from any height. This grants advantage on tests of secure fall and immunity to fall damage when successfully gliding.",
         },
     ],
     flaws: [
@@ -1871,6 +1913,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: -20,
             description: "You receive disadvantage on every test related to INS, including skills that use it.",
         },
+        {
+            name: "Faulty Spirit",
+            cost: -15,
+            description: "Your AL becomes 1x INS",
+        },
         // Physical Disability Section
         {
             name: "Faulty Strength",
@@ -1896,7 +1943,17 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Inability to Swim",
             cost: -10,
             description: "You instantly fail any swim checks unless you roll a nat 20.",
-        }
+        },
+        {
+            name: "Reduced Mobility",
+            cost: -10,
+            description: "Your movement score is halved (round up).",
+        },
+        {
+            name: "Reduced Stamina",
+            cost: -15,
+            description: "Your FL is 1x VIG, MFL is 2xVIG, EFL is 3xVIG.",
+        },
     ],
 
 }
