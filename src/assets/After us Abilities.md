@@ -11,12 +11,10 @@
 
 **Magic**
 
-* [ ] Illusimantia(15)
 * [ ] Known Spell(3)
 * [!] Magus(10)
 * [ ] Psyquemantia(20)
 * [ ] Spell Adeptness(5)
-* [brf] Taktikosmantia(10)
 * [ ] Reckless Casting (10)
 
 **Personal**
@@ -28,12 +26,12 @@
 **Skill**
 
 * [?] Evasion(10)
-* [?] Masterpiece(30)
 * [brf] Self Sufficient(20)
 * [brf] Skill Adeptness(10)
 
 
 **Flaws**
+
 * [ ] Bad Appearance (-10)
 * [*] Faulty Spirit (-15)
 * [*] Faulty Health (-20)

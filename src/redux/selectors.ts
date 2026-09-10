@@ -14,6 +14,12 @@ export const getCurrentSpells = createSelector(
         if (ability.spells?.length) {
           spells.push(...ability.spells);
         }
+
+        ability.enhancements?.forEach((enhancement, index) => {
+          if (ability.appliedEnhancementsList?.[index] && enhancement.spells?.length) {
+            spells.push(...enhancement.spells);
+          }
+        });
       });
 
       return spells.length

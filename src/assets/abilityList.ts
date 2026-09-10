@@ -17,25 +17,25 @@ export type EnhancementModes = "none" | "any" | "stacking"
 export const DROPDOWNS = {
     attackType: ["melee", "ranged"],
     damageResistance: [
-        "biologic",
         "chemical",
         "cold",
         "electric",
         "fire",
         "necrotic",
-        "posion",
+        "poison",
+        "radiant",
         "slash",
         "smash",
         "magic",
     ],
     damageType: [
-        "biologic",
         "chemical",
         "cold",
         "electric",
         "fire",
         "necrotic",
-        "posion",
+        "poison",
+        "radiant",
         "slash",
         "smash",
         "magic",
@@ -71,6 +71,7 @@ export type AbilityEnhancement = {
     cost: number,
     description: string,
     degree?: Degrees,
+    spells?: string[], // An array of the names of spells granted by this enhancement, if any.
 }
 
 export type Ability = {
@@ -80,7 +81,7 @@ export type Ability = {
     degree?: Degrees, // The ability's power degree. Defaults to Normal
     spells?: string[], // An array of the names of spells granted by this ability, if any.
     prereq?: Prereq // An object containing all requirements needed in order to have this ability.
-    stackable?: Boolean // If true, this ability can be aquired more than once on one sheet. Defaults to False.
+    stackable?: Boolean // If true, this ability can be acquired more than once on one sheet. Defaults to False.
     exclusive?: String // The name of another ability. If given as a param, this ability cannot be added to a sheet that already has that ability.
     enhancementMode?: EnhancementModes // If this ability has enhancement options, this value must be 'any' or 'stacking'
     enhancements?: AbilityEnhancement[] // If this ability has enhancements, they are defined as an array here.
@@ -180,12 +181,12 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: 10,
             stackable: true,
             dropdownMode: "attackType",
-            description: "Takes a complete action and 1 FP to charge, where you are considered off-gaurd. Your next attack does +100% damage if it lands. This ability can't be combined with any ability that allows multiple attacks. Taking damage while charging requires a Will test with a DC equal to the damage received, on a failure you lose the charge effects.",
+            description: "Takes a complete action and 1 FP to charge, where you are considered off-guard. Your next attack does +100% damage if it lands. This ability can't be combined with any ability that allows multiple attacks. Taking damage while charging requires a Will test with a DC equal to the damage received, on a failure you lose the charge effects.",
         },
         {
             name: "Combat Reflexes",
             cost: 10,
-            description: "When an opponent in melee range is off-gaurd, you can do a basic melee attack as a reaction at the cost of 1 FP.",
+            description: "When an opponent in melee range is off-guard, you can do a basic melee attack as a reaction at the cost of 1 FP.",
         },
         {
             name: "Combat Veteran",
@@ -261,7 +262,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "You can use this ability with medium weapons. Requires Previous." // This doesn't actually enforce the req previous rule since the final enchancement doesn't need this one. 
+                    description: "You can use this ability with medium weapons. Requires Previous." // This doesn't actually enforce the req previous rule since the final enhancement doesn't need this one.
                 },
                 {
                     cost: 20,
@@ -273,7 +274,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Heavy Hands",
             cost: 10,
-            description: "Increase your unarmed damage by 1d6, making it the same daamge as a light weapon.",
+            description: "Increase your unarmed damage by 1d6, making it the same damage as a light weapon.",
             enhancementMode: "stacking",
             enhancements: [
                 {
@@ -298,7 +299,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: 5,
             stackable: true,
             dropdownMode: "maneuver",
-            description: "Choose a maneuver type. You receive advantage when preforming or defending against the chosen maneuver. You can aquire this once for each maneuver",
+            description: "Choose a maneuver type. You receive advantage when performing or defending against the chosen maneuver. You can acquire this once for each maneuver",
         },
         {
             name: "Rage",
@@ -317,7 +318,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 },
                 {
                     cost: 10,
-                    description: "For every STR point you have you can enter a rage state before needing to rest. Requires previous." // This doesn't actually enforce the req previous rule since the next enchancements don't need this one. 
+                    description: "For every STR point you have you can enter a rage state before needing to rest. Requires previous." // This doesn't actually enforce the req previous rule since the next enhancements don't need this one.
                 },
                 {
                     cost: 10,
@@ -363,7 +364,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             cost: 10,
             stackable: true,
             dropdownMode: "damageType",
-            description: "Choose a damage type that you don't have affinity with. You receive affinity with it. You can aquire this once for each damage type.",
+            description: "Choose a damage type that you don't have affinity with. You receive affinity with it. You can acquire this once for each damage type.",
         },
         {
             name: "Damage Resistance",
@@ -449,7 +450,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Weapon Focus",
             cost: 10,
-            description: "Choose a damage type you have affinity with. When performing attacks with this damage type, you receive +2 to your attack test. This ability can be aquired once for each damage type",
+            description: "Choose a damage type you have affinity with. When performing attacks with this damage type, you receive +2 to your attack test. This ability can be acquired once for each damage type",
             stackable: true,
             dropdownMode: "currentDamageAffinities",
             enhancementMode: "any",
@@ -463,7 +464,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Projectile",
             cost: 10,
-            description: "Choose a damage type you have affinity to. You gain a natural ranged weapon that does 1d6 damage in the type chosen. You can aquire this once for each damage type.",
+            description: "Choose a damage type you have affinity to. You gain a natural ranged weapon that does 1d6 damage in the type chosen. You can acquire this once for each damage type.",
             stackable: true,
             dropdownMode: "currentDamageAffinities",
             enhancementMode: "any",
@@ -562,7 +563,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "When sucessfuly deflecting an attack you can choose to use +1 FP to redirect the attack to a new target with an Aim check."
+                    description: "When successfully deflecting an attack you can choose to use +1 FP to redirect the attack to a new target with an Aim check."
                 }
             ]
         },
@@ -579,7 +580,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 20,
-                    description: "When sucessfuly parrying an attack you can preform a basic melee attack as a counter-attack. Adds 1FP in addition to the parry."
+                    description: "When successfully parrying an attack you can perform a basic melee attack as a counter-attack. Adds 1FP in addition to the parry."
                 },
                 {
                     cost: 20,
@@ -619,18 +620,18 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             stackable: true,
             dropdownMode: "attackType",
-            description: "When using a major action to attack, you can peform a number of additional attacks of the same type (melee or range) equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
+            description: "When using a major action to attack, you can perform a number of additional attacks of the same type (melee or range) equal to your AGL divided by 5 (round down). Each additional attack gives +1 FP and has disadvantage.",
             enhancementMode: "any",
             enhancements: [
                 {
                     cost: 20,
                     degree: "amazing",
-                    description: "You don't recieve disadvantage on attacks given by this ability"
+                    description: "You don't receive disadvantage on attacks given by this ability"
                 },
                 {
                     cost: 20,
                     degree: "epic",
-                    description: "You can perfom any number of addtional attacks for 3 FP."
+                    description: "You can perform any number of additional attacks for 3 FP."
                 }
             ]
         },
@@ -642,7 +643,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 10,
-                    description: "You can increase the DC of the stun test by 2 for every extra 1 FP you choose to add. This can't be used with the Paralize enhancement"
+                    description: "You can increase the DC of the stun test by 2 for every extra 1 FP you choose to add. This can't be used with the Paralyze enhancement"
                 },
                 {
                     cost: 20,
@@ -935,7 +936,63 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 }
             ]
         },
-        // Other Magic Abiliites
+        {
+            name: "Illusimantia",
+            cost: 20,
+            prereq: {
+                abilities: ["Mantia"]
+            },
+            description: "Illusion magic. You learn the spells Illusion and Self-Copy",
+            spells: ["illusion", "self-copy"],
+            enhancementMode: "stacking",
+            enhancements: [
+                {
+                    cost: 20,
+                    degree: "amazing",
+                    description: "You can cast these spells to the Amazing degree, and learn the spell Invisibility",
+                    spells: ["invisibility"]
+                },
+                {
+                    cost: 20,
+                    degree: "epic",
+                    description: "You can cast these spells to the Epic degree",
+                }
+            ]
+        },
+        {
+            name: "Tactimantia",
+            cost: 20,
+            prereq: {
+                skill: {
+                    magic: 5,
+                },
+                abilities: ["Mantia"]
+            },
+            description: "Magic focused on controlling Aether into powerful and damaging forms. You learn the basic spell Range.",
+            spells: ["range"],
+            enhancementMode: "any",
+            enhancements: [
+                {
+                    cost: 10,
+                    degree: "normal",
+                    description: "You learn the spell Guided Bolt",
+                    spells: ["guided bolt"]
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "REQUIRES POLEMOSMANTIA. You learn the spell Ballistics",
+                    spells: ["ballistics"]
+                },
+                {
+                    cost: 10,
+                    degree: "amazing",
+                    description: "REQUIRES KINESISMANTIA. You learn the spell Telekinesis",
+                    spells: ["telekinesis"]
+                },
+            ]
+        },
+        // Other Magic Abilities
         {
             name: "Known Spell",
             cost: 3,
@@ -1027,15 +1084,15 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Alternate Form",
             cost: 20,
             stackable: true,
-            description: "You have another form! You are free to build this form as long as it has the same XP, REA, INS, reason and instinct related skills, and reason and instinct related abilities and flaws. Changing forms consume a whole round, leaving your off gaurd. If you take damage during the transformation, it is canceled."
+            description: "You have another form! You are free to build this form as long as it has the same XP, REA, INS, reason and instinct related skills, and reason and instinct related abilities and flaws. Changing forms consume a whole round, leaving you off-guard. If you take damage during the transformation, it is canceled."
         },
         {
             name: "Attractive",
             cost: 10,
             stackable: true,
             dropdownMode: "baseStats",
-            description: "Something about your appearance makes you attractive. Choose a stat to which your attrativeness will be connected to. You receive +2 to your Charisma tests relating to that stat.",
-            exclusive: "Bad Apperance"
+            description: "Something about your appearance makes you attractive. Choose a stat to which your attractiveness will be connected to. You receive +2 to your Charisma tests relating to that stat.",
+            exclusive: "Bad Appearance"
         },
         {
             name: "Extra Attractive",
@@ -1066,13 +1123,13 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Extra Limb - STR",
             cost: 10,
             stackable: true,
-            description: "You have an extra appendage. This appendage gives +1 to your movement, tests of Althetics to run and jump and test of Brawl to resist and perform the maneuvers Push and Trample. Every character with at least one extra limb is treated as if they have the flaw Strange Form (Armor)"
+            description: "You have an extra appendage. This appendage gives +1 to your movement, tests of Athletics to run and jump and test of Brawl to resist and perform the maneuvers Push and Trample. Every character with at least one extra limb is treated as if they have the flaw Strange Form (Armor)"
         },
         {
             name: "Extra Limb - AGL",
             cost: 10,
             stackable: true,
-            description: "You have an extra appendage. This appendage works the same as an arm, being able to hold objects and weapons, and make complex gestures. When using Dual Wield, you can peform an additional attack with every extra AGL limb. Every character with at least one extra limb is treated as if they have the flaw Strange Form (Armor)"
+            description: "You have an extra appendage. This appendage works the same as an arm, being able to hold objects and weapons, and make complex gestures. When using Dual Wield, you can perform an additional attack with every extra AGL limb. Every character with at least one extra limb is treated as if they have the flaw Strange Form (Armor)"
         },
         {
             name: "False Appearance",
@@ -1148,7 +1205,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Imitate",
             cost: 20,
             degree: "amazing",
-            description: "You can imitate an ability from a target, except for size related abilities. If possible, the target must have used this ability before you can test for imitating it. To do so, you must use one combat turn and be well succeeded in a test of Perception with DC equal to the target's defense. If well succeeded, you copy the ability for a scene, accumulating the XP of the skill divided by 10 in XP. You can imitate a maximum number of abilites equal to your original REA score.",
+            description: "You can imitate an ability from a target, except for size related abilities. If possible, the target must have used this ability before you can test for imitating it. To do so, you must use one combat turn and be well succeeded in a test of Perception with DC equal to the target's defense. If well succeeded, you copy the ability for a scene, accumulating the XP of the skill divided by 10 in XP. You can imitate a maximum number of abilities equal to your original REA score.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1167,7 +1224,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 {
                     cost: 50,
                     degree: "epic",
-                    description: "You can imitate a target as a whole. You must have studied the target for a whole week. Using this yeilds FP equal to the target's highest stat"
+                    description: "You can imitate a target as a whole. You must have studied the target for a whole week. Using this yields FP equal to the target's highest stat"
                 }
             ]
         },
@@ -1211,7 +1268,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             enhancements: [
                 {
                     cost: 10,
-                    description: "When in combat, as long as you don't perfom any action that causes harm to another character, you can avoid being attacked as long as your opponent fails a Discern test against your Deception."
+                    description: "When in combat, as long as you don't perform any action that causes harm to another character, you can avoid being attacked as long as your opponent fails a Discern test against your Deception."
                 },
                 {
                     cost: 10,
@@ -1222,7 +1279,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
         {
             name: "Hidden Power",
             cost: 10,
-            description: "You can concentrate energy to release more power. In combat you can concentrate to increase your basic stats, where you are considered off gaurd. For every round concentrating, you take 1 FP and your stat goes up by 1.",
+            description: "You can concentrate energy to release more power. In combat you can concentrate to increase your basic stats, where you are considered off-guard. For every round concentrating, you take 1 FP and your stat goes up by 1.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1248,7 +1305,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Invisibility",
             cost: 20,
             degree: "amazing",
-            description: "Using a minor action, you become invisible. Every character has major disavantage on attacks against you and you recieve major advantage on Stealth tests. Staying invisible yields 1 FP per round. Doing an aggresive action, taking damage, or becoming defeated or unconscious causes your invisibility to fade.",
+            description: "Using a minor action, you become invisible. Every character has major disadvantage on attacks against you and you receive major advantage on Stealth tests. Staying invisible yields 1 FP per round. Doing an aggressive action, taking damage, or becoming defeated or unconscious causes your invisibility to fade.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1272,7 +1329,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Possession",
             cost: 20,
             degree: "amazing",
-            description: "Using a major action you can enter the body of an unconscious or defeated target while grappling them. You can assume the target's body, gaining all physical stats and abilities from them. You must be well succedded in a test of Will agaisnt the target's Endurance to successfully possess the target you are touching. The target can attempt to expel you every round by re-running this check, but you only have to succeed.",
+            description: "Using a major action you can enter the body of an unconscious or defeated target while grappling them. You can assume the target's body, gaining all physical stats and abilities from them. You must be well succeeded in a test of Will against the target's Endurance to successfully possess the target you are touching. The target can attempt to expel you every round by re-running this check, but you only have to succeed.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1359,7 +1416,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             },
             stackable: true,
             dropdownMode: "arena",
-            description: "Choose a terrain type. When on this terrain, you get a bonus of +2 to all Actobatics, Athletics, Perception, Survival, and Tracking tests.",
+            description: "Choose a terrain type. When on this terrain, you get a bonus of +2 to all Acrobatics, Athletics, Perception, Survival, and Tracking tests.",
         },
         {
             name: "Artist",
@@ -1442,7 +1499,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Skill Adeptness",
             cost: 10,
             dropdownMode: "skills",
-            description: "Pre: 4 points in the selected skill. Whenever you preform a test with this skill, you can receive advantage for 1 FP.",
+            description: "Pre: 4 points in the selected skill. Whenever you perform a test with this skill, you can receive advantage for 1 FP.",
             stackable: true,
             exclusive: "Skill Inability"
         },
@@ -1469,7 +1526,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     instinct: 5
                 }
             },
-            description: "You can use an Active Perecption check whenever you would use an Passive Perception check.",
+            description: "You can use an Active Perception check whenever you would use an Passive Perception check.",
         },
         {
             name: "Mingy Crafter",
@@ -1489,7 +1546,7 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                     endurance: 2
                 }
             },
-            description: "Reduces the penalties from climate on tests of Endurance. Total disavantage becomes major disadvantage, ect. You can also sleep while wearing armor.",
+            description: "Reduces the penalties from climate on tests of Endurance. Total disadvantage becomes major disadvantage, etc. You can also sleep while wearing armor.",
         },
         {
             name: "Violent Behavior",
@@ -1615,14 +1672,14 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
                 {
                     cost: 30,
                     degree: "amazing",
-                    description: "Requires previous. You can steal any equipped item, but receive disavantage on the test."
+                    description: "Requires previous. You can steal any equipped item, but receive disadvantage on the test."
                 }
             ]
         },
         {
             name: "Identify Person",
             cost: 10,
-            description: "Using a Minor action, you can use your ruse skill to get information on the stats, skills, abilities and flaws of a target. The DC is equal to 10 plus the target's power divided by 100. Each test gives one peice of information (stat values, skill group values, mental or physical abilites, ect.) If the target has good or bad reputation, you get advantage.",
+            description: "Using a Minor action, you can use your ruse skill to get information on the stats, skills, abilities and flaws of a target. The DC is equal to 10 plus the target's power divided by 100. Each test gives one piece of information (stat values, skill group values, mental or physical abilities, etc.) If the target has good or bad reputation, you get advantage.",
             enhancementMode: "any",
             enhancements: [
                 {
@@ -1953,6 +2010,11 @@ const unsortedAbilities: { [key in Categories]: Ability[] } = {
             name: "Reduced Stamina",
             cost: -15,
             description: "Your FL is 1x VIG, MFL is 2xVIG, EFL is 3xVIG.",
+        },
+        {
+            name: "Panic Attack",
+            cost: -15,
+            description: "When rolling for initiative, also roll 1d6. If either result is a 1, your flaw activates, and you become stunned for every turn except for one movement action. This lasts every turn until you don't roll a 1.",
         },
     ],
 

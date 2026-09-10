@@ -11,6 +11,7 @@ Needs:
 * Dropdown null on first selection bug
 * Skill Inability / Adeptness flag on skills
 * Checkbox on degree filter for literal search or "less than" search
+* Custom Prereq Box
 
 Wants:
 * Ability Search
